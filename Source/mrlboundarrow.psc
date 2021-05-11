@@ -14,5 +14,5 @@ EndEvent
 Event OnEffectFinish(Actor ckTarget, Actor ckCaster)
 
 		ckCaster.RemoveItem(boundAmmo, ckCaster.getItemCount(boundAmmo), true)
-
+	test()
 EndEvent
