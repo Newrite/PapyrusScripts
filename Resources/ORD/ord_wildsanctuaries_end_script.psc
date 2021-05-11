@@ -1,0 +1,23 @@
+Scriptname ORD_WildSanctuaries_End_Script extends activemagiceffect  
+
+; -----
+
+Spell Property ORD_Alt_WildSanctuaries_Spell_Ab_Buff_01_Alteration Auto
+Spell Property ORD_Alt_WildSanctuaries_Spell_Ab_Buff_02_Conjuration Auto
+Spell Property ORD_Alt_WildSanctuaries_Spell_Ab_Buff_03_Destruction Auto
+Spell Property ORD_Alt_WildSanctuaries_Spell_Ab_Buff_04_Illusion Auto
+Spell Property ORD_Alt_WildSanctuaries_Spell_Ab_Buff_05_Restoration Auto
+
+; -----
+
+Event OnEffectFinish(Actor akTarget, Actor akCaster)
+
+	akTarget.RemoveSpell(ORD_Alt_WildSanctuaries_Spell_Ab_Buff_01_Alteration)
+	akTarget.RemoveSpell(ORD_Alt_WildSanctuaries_Spell_Ab_Buff_02_Conjuration)
+	akTarget.RemoveSpell(ORD_Alt_WildSanctuaries_Spell_Ab_Buff_03_Destruction)
+	akTarget.RemoveSpell(ORD_Alt_WildSanctuaries_Spell_Ab_Buff_04_Illusion)
+	akTarget.RemoveSpell(ORD_Alt_WildSanctuaries_Spell_Ab_Buff_05_Restoration)
+
+EndEvent
+
+; -----

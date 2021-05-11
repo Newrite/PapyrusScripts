@@ -1,0 +1,21 @@
+<?xml version='1.0'?><!-- Game is either sse, tesv, or fo4 -->
+<PapyrusProject xmlns="PapyrusProject.xsd" 
+    Flags="TESV_Papyrus_Flags.flg" 
+    Game="tesv" 
+    Output="Scripts" 
+    Optimize="false" 
+    Release="false" 
+    Final="false">
+    <Imports>
+        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\SKSE</Import>
+        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\ORD</Import>
+        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\My</Import>
+        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\GameSource</Import>
+        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\GameSource\Dawnguard</Import>
+        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\GameSource\Hearthfire</Import>
+        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\GameSource\Dragonborn</Import>
+    </Imports>
+    <Folders>
+        <Folder>.\Source</Folder>
+    </Folders>
+</PapyrusProject>

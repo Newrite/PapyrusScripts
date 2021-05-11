@@ -1,0 +1,33 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Papyrus Compile File (Skyrim)",
+            "group": "build",
+            "type": "process",
+            "command": "E:\\Mod Organizer 2\\mods\\SkyrimProjects\\Papyrus Compiler\\PapyrusCompiler.exe",
+            "options": {
+                "cwd": "E:\\Mod Organizer 2\\mods\\SkyrimProjects\\Papyrus Compiler"
+            },
+            "args": [
+                {
+                    "value": "E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Source\\REQ_ElementalFury.psc",
+                    "quoting": "strong"
+                },
+                {
+                    "value": "-import=E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Resources\\SKSE;E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Resources\\GameSource;E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Resources\\GameSource\\Dawnguard;E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Resources\\GameSource\\Hearthfire;E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Resources\\GameSource\\Dragonborn;E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Source",
+                    "quoting": "strong"
+                },
+                {
+                    "value": "-output=E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts",
+                    "quoting": "strong"
+                },
+                {
+                    "value": "-flags=TESV_Papyrus_Flags.flg",
+                    "quoting": "strong"
+                }
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
