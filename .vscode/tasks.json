@@ -5,21 +5,19 @@
             "label": "Papyrus Compile File (Skyrim)",
             "group": "build",
             "type": "process",
-            "command": "E:\\Mod Organizer 2\\mods\\SkyrimProjects\\Papyrus Compiler\\PapyrusCompiler.exe",
-            "options": {
-                "cwd": "E:\\Mod Organizer 2\\mods\\SkyrimProjects\\Papyrus Compiler"
-            },
+            "command": ".\\Papyrus Compiler\\PapyrusCompiler.exe",
+            "options": {},
             "args": [
                 {
-                    "value": "E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Source\\REQ_ElementalFury.psc",
+                    "value": ".\\Source\\REQ_ElementalFury.psc",
                     "quoting": "strong"
                 },
                 {
-                    "value": "-import=E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Resources\\SKSE;E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Resources\\GameSource;E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Resources\\GameSource\\Dawnguard;E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Resources\\GameSource\\Hearthfire;E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Resources\\GameSource\\Dragonborn;E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts\\Source\\ProjectFoAll\\Source",
+                    "value": "-import=.\\Resources\\SKSE;.\\Resources\\GameSource;.\\Resources\\GameSource\\Dawnguard;.\\Resources\\GameSource\\Hearthfire;.\\Resources\\GameSource\\Dragonborn;.\\MySourceScripts",
                     "quoting": "strong"
                 },
                 {
-                    "value": "-output=E:\\Mod Organizer 2\\mods\\SkyrimProjects\\scripts",
+                    "value": "-output=..\\scripts",
                     "quoting": "strong"
                 },
                 {

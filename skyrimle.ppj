@@ -7,15 +7,15 @@
     Release="false" 
     Final="false">
     <Imports>
-        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\SKSE</Import>
-        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\ORD</Import>
-        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\My</Import>
-        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\GameSource</Import>
-        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\GameSource\Dawnguard</Import>
-        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\GameSource\Hearthfire</Import>
-        <Import>E:\Mod Organizer 2\mods\SkyrimProjects\scripts\Source\ProjectFoAll\Resources\GameSource\Dragonborn</Import>
+        <Import>.\Resources\SKSE</Import>
+        <Import>.\Resources\ORD</Import>
+        <Import>.\Resources\My</Import>
+        <Import>.\Resources\GameSource</Import>
+        <Import>.\Resources\GameSource\Dawnguard</Import>
+        <Import>.\Resources\GameSource\Hearthfire</Import>
+        <Import>.\Resources\GameSource\Dragonborn</Import>
     </Imports>
     <Folders>
-        <Folder>.\Source</Folder>
+        <Folder>.\MySourceScripts</Folder>
     </Folders>
 </PapyrusProject>
