@@ -9,7 +9,7 @@
             "options": {},
             "args": [
                 {
-                    "value": ".\\Source\\MRL_RBB_ArktusScriptAbility.psc",
+                    "value": ".\\MySourceScripts\\MRL_RBB_ArktusScriptController.psc",
                     "quoting": "strong"
                 },
                 {
