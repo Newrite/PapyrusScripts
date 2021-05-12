@@ -28,6 +28,28 @@
             "problemMatcher": [
                 "$PapyrusCompiler"
             ],
+        },
+        {
+            "label": "Papyrus Decompile File (Skyrim)",
+            "group": "build",
+            "type": "process",
+            "command": ".\\Champollion\\Champollion.exe",
+            "options": {},
+            "args": [
+                {
+                    "value": ".\\Champollion\\ToDecompile\\MCT_AttackDrainsStamina.pex",
+                    "quoting": "strong"
+                },
+                {
+                    "value": "-p.\\Decompilled",
+                    "quoting": "strong"
+                },
+                {
+                    "value": "-a.\\Decompilled",
+                    "quoting": "strong"
+                }
+            ],
+            "problemMatcher": [],
         }
     ]
 }
