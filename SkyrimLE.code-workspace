@@ -9,7 +9,6 @@
         "papyrus.skyrimSpecialEdition.enabled": false,
         "papyrus.fallout4.enabled": false,
         "papyrus.skyrim.enabled": true,
-        "cSpell.words": [
-        ],
+        "cSpell.words": [],
     }
 }

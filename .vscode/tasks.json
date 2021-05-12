@@ -9,7 +9,7 @@
             "options": {},
             "args": [
                 {
-                    "value": ".\\Source\\REQ_ElementalFury.psc",
+                    "value": ".\\Source\\MRL_RBB_ArktusScriptAbility.psc",
                     "quoting": "strong"
                 },
                 {
@@ -25,7 +25,9 @@
                     "quoting": "strong"
                 }
             ],
-            "problemMatcher": []
+            "problemMatcher": [
+                "$PapyrusCompiler"
+            ],
         }
     ]
 }

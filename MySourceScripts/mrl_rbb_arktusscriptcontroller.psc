@@ -12,7 +12,9 @@ Actor Caster
 
 Function ArktusCalculate()
   OldBaseMagicka = Caster.GetBaseAV("Magicka")
-  WeaponDamage = OldBaseMagicka * DamagePerBaseMana
+  If (OldBaseMagicka > 100)
+      WeaponDamage = (OldBaseMagicka - 100) * DamagePerBaseMana
+  EndIf
 EndFunction
 
 Function SetArktusMagnitude()
