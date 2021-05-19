@@ -12,4 +12,5 @@ Event OnInit()
 	Game.GetPlayer().AddPerk(Crit)
 	Game.GetPlayer().AddPerk(EnchDamagePower)
 	Game.GetPlayer().AddPerk(EnchDamageCrit)
+
 EndEvent

@@ -13,45 +13,49 @@ string sCritMult = "OneHandedSkillAdvance"
 string sEnchDamage = "DestructionSkillAdvance"
 string sEnchDamageCritChance = "ConjurationSkillAdvance"
 
-int[] Function getStats()
-    int[] stats = new int[3]
-    stats[0] = caster.GetActorValue(sCritChance) as Int
-    stats[1] = caster.GetActorValue(sCritMult) as Int
-    stats[2] = caster.GetActorValue(sEnchDamage) as Int
-    stats[3] = caster.GetActorValue(sEnchDamageCritChance) as Int
+float[] Function getStats()
+    float[] stats = new float[4]
+    stats[0] = caster.GetActorValue(sCritChance) as float
+    stats[1] = caster.GetActorValue(sCritMult) as float
+    stats[2] = caster.GetActorValue(sEnchDamage) as float
+    stats[3] = caster.GetActorValue(sEnchDamageCritChance) as float
+    ;Debug.Notification("Return Get Stats: " + stats)
     return stats
 EndFunction
 
 ;/
     stats[0] - Шанс крита
     stats[1] - Мультипликатор крита
-    stats[2] - Мультипликатор эффективности чар на оружии (не относится к криту stats[3] - Шанс критической эффективности чар на оружии (по-умолчанию 1.5х)
+    stats[2] - Мультипликатор эффективности чар на оружии (не относится к криту
+    stats[3] - Шанс критической эффективности чар на оружии (по-умолчанию 1.5х)
 /;
 
-Function setGlobals(int[] stats)
-    if stats[0] < 100
-        gCritChance.SetValueInt(stats[0])
+Function setGlobals(float[] stats)
+    ;Debug.Notification("Set Globals: " + stats)
+    if stats[0] < 100.0
+        gCritChance.SetValue(stats[0])
     else
-        gCritChance.SetValueInt(100)
+        gCritChance.SetValue(100.0)
     endIf
-    if stats[1] < 200
-        gCritChance.SetValueInt(stats[1])
+    if stats[1] < 200.0
+        gCritMult.SetValue(stats[1])
     else
-        gCritChance.SetValueInt(200)
+        gCritMult.SetValue(200.0)
     endIf
-    if stats[2] < 200
-        gCritChance.SetValueInt(stats[2])
+    if stats[2] < 200.0
+        gEnchDamage.SetValue(stats[2])
     else
-        gCritChance.SetValueInt(200)
+        gEnchDamage.SetValue(200.0)
     endIf
-    if stats[3] < 100
-        gCritChance.SetValueInt(stats[3])
+    if stats[3] < 100.0
+        gEnchDamageCritChance.SetValue(stats[3])
     else
-        gCritChance.SetValueInt(100)
+        gEnchDamageCritChance.SetValue(100.0)
     endIf
 EndFunction
 
 Function updateGlobals()
+    ;Debug.Notification("Update Globals")
     setGlobals(getStats())
 EndFunction
 
@@ -62,6 +66,7 @@ Event OnEffectStart(Actor akCaster, Actor akTarget)
 endEvent
 
 Event OnUpdate()
+    ;Debug.Notification("On Update: " + _register)
     if !_register
         UnregisterForUpdate()
         return

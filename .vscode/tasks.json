@@ -9,7 +9,7 @@
             "options": {},
             "args": [
                 {
-                    "value": ".\\MySourceScripts\\MRL_RBB_ArktusScriptController.psc",
+                    "value": ".\\MySourceScripts\\MRL_EnchUpdateGlobals.psc",
                     "quoting": "strong"
                 },
                 {
@@ -37,7 +37,7 @@
             "options": {},
             "args": [
                 {
-                    "value": ".\\Champollion\\ToDecompile\\MCT_AttackDrainsStamina.pex",
+                    "value": ".\\Champollion\\ToDecompile\\uimenubase.pex",
                     "quoting": "strong"
                 },
                 {
