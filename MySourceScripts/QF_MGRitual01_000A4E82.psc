@@ -13,7 +13,7 @@ ReferenceAlias Property Alias_Pedestal03 Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY Book04
-;ALIAS PROPERTY TYPE ReferenceAlia
+;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_Book04 Auto
 ;END ALIAS PROPERTY
 
