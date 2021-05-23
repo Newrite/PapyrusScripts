@@ -9,7 +9,7 @@
             "options": {},
             "args": [
                 {
-                    "value": ".\\MySourceScripts\\DispelEffectOnFinish.psc",
+                    "value": ".\\MySourceScripts\\MRL_CurseQuest.psc",
                     "quoting": "strong"
                 },
                 {

@@ -6,7 +6,9 @@ FormList Property listOfAdeptPerks auto
 FormList Property listOfExpertPerks auto
 FormList Property listOfMasterPerks auto
 Spell Property cursedRegenSpell auto
-Spell Property descSpell auto
+GlobalVariable Property gCurseDamage Auto
+GlobalVariable Property gCurseCost Auto
+GlobalVariable Property gCurseSummon Auto
 Float Property MaxCurseDamage Auto
 Float Property MaxCurseSummon Auto
 Float Property MaxCurseCost Auto
@@ -121,25 +123,17 @@ Function ApplyConcCursed(float Cost, int WaitIndex)
 	endwhile
 endFunction
 
-function updateAbility()
-	cursedActor.RemoveSpell(descSpell)
+function updateGlobals()
 	float EnchantingSkillAdvance = cursedActor.GetActorValue("EnchantingSkillAdvance") as Float
 	if EnchantingSkillAdvance >= 100.0
-		descSpell.SetNthEffectMagnitude(0, MaxCurseDamage)
-		descSpell.SetNthEffectMagnitude(2, MaxCurseCost)
-		descSpell.SetNthEffectMagnitude(4, MaxCurseSummon)
-		descSpell.SetNthEffectMagnitude(1, MaxCurseDamage/2.0)
-		descSpell.SetNthEffectMagnitude(3, MaxCurseCost/2.0)
-		descSpell.SetNthEffectMagnitude(5, MaxCurseSummon/2.0)
+		gCurseDamage.SetValue(MaxCurseDamage)
+		gCurseCost.SetValue(MaxCurseCost)
+		gCurseSummon.SetValue(MaxCurseSummon)
 	else
-		descSpell.SetNthEffectMagnitude(0, EnchantingSkillAdvance * 0.2)
-		descSpell.SetNthEffectMagnitude(2, EnchantingSkillAdvance * 0.5)
-		descSpell.SetNthEffectMagnitude(4, EnchantingSkillAdvance * 0.25)
-		descSpell.SetNthEffectMagnitude(1, EnchantingSkillAdvance * 0.1)
-		descSpell.SetNthEffectMagnitude(3, EnchantingSkillAdvance * 0.25)
-		descSpell.SetNthEffectMagnitude(5, EnchantingSkillAdvance * 0.125)
+		gCurseDamage.SetValue(EnchantingSkillAdvance * 0.2)
+		gCurseCost.SetValue(EnchantingSkillAdvance * 0.5)
+		gCurseSummon.SetValue(EnchantingSkillAdvance * 0.25)
 	endif
-	cursedActor.AddSpell(descSpell, false)
 endFunction
 
 Event OnObjectEquipped(Form akBaseObject, ObjectReference akReference)				;When something is equipped: 
@@ -224,7 +218,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 
 		registerStage = true
 		cursedActor = akCaster
-		updateAbility()
+		updateGlobals()
 		RegisterForSingleUpdate(3.0)
 		
 endEvent
@@ -239,7 +233,7 @@ Event OnUpdate()
 		UnregisterForUpdate()
 		return
 	else
-		updateAbility()
+		updateGlobals()
 	endif
 	RegisterForSingleUpdate(3.0)
 EndEvent
