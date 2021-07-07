@@ -14,7 +14,7 @@ Float Property DamageAmount Auto
 
 String Property ActorValueToDamage Auto
 
-Event OnEffectStart(Actor akCaster, Actor akTarget)
+Event OnEffectStart(Actor akTarget, Actor akCaster)
     if akCaster.GetActorValue(ActorValueToDamage) as Float >= DamageAmount
         AbsorbSpell.Cast(akCaster, akTarget)
         akCaster.ModActorValue(ActorValueToDamage, -DamageAmount)
@@ -22,7 +22,7 @@ Event OnEffectStart(Actor akCaster, Actor akTarget)
     CastShieldBash(akCaster, akTarget)
 endEvent
 
-Function CastShieldBash(Actor akCaster, Actor akTarget)
+Function CastShieldBash(Actor akTarget, Actor akCaster)
     if akCaster.HasPerk(PerkDisarmShieldBash)
         DisarmShieldBash.Cast(akCaster, akTarget)
         return

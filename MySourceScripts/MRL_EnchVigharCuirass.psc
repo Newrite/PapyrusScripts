@@ -5,7 +5,7 @@ Spell Property AbsorbNova Auto
 bool _register = false
 actor caster
 
-Event OnEffectStart(Actor akCaster, Actor akTarget)
+Event OnEffectStart(Actor akTarget, Actor akCaster)
     _register = true
     caster = akTarget
     RegisterForSingleUpdate(1.0)

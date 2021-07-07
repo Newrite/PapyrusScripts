@@ -2,7 +2,7 @@ Scriptname MRL_EnchVampireWeapon extends ActiveMagicEffect
 
 Spell Property VampireEnch Auto
 
-Event OnEffectStart(Actor akCaster, Actor akTarget)
+Event OnEffectStart(Actor akTarget, Actor akCaster)
 	Float targetMR = akTarget.GetActorValue("MagicResist")
     Float mag = Self.GetMagnitude() / (1 - targetMR / 100)
     VampireEnch.SetNthEffectMagnitude(0, mag)
@@ -10,5 +10,3 @@ Event OnEffectStart(Actor akCaster, Actor akTarget)
     VampireEnch.SetNthEffectMagnitude(2, mag)
     VampireEnch.Cast(akCaster, akTarget)
 endEvent
-
-Even

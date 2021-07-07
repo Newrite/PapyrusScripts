@@ -22,21 +22,12 @@ ReferenceAlias Property Alias_Tolfdir Auto
 ReferenceAlias Property Alias_DaggerContainer Auto
 ;END ALIAS PROPERTY
 
-Message Property ChooseSpell Auto
-FormList Property ListOfMasterSpells auto
-
-function StartChoose()
-	int IndexSpell = ChooseSpell.Show()
-	Utility.Wait(1.0)
-	Game.GetPlayer().AddSpell(ListOfMasterSpells.GetAt(IndexSpell) as Spell, true)
-endfunction
 
 ;BEGIN FRAGMENT Fragment_16
 Function Fragment_16()
 ;BEGIN CODE
 CompleteAllObjectives()
 Game.GetPlayer().RemoveItem(Heartscales,1)
-StartChoose()
 MGRitualAltBook.SetValue(0)
 AlterationVendorChest.AddItem(SpellTomeMassParalysis, 1)
 Stop()

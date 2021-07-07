@@ -42,6 +42,7 @@ GlobalVariable Property PCRestorationMaster  Auto
 
 
 GlobalVariable Property PlayerIsVampire  Auto
+GlobalVariable Property SibillaQuestComplite  Auto
 GlobalVariable Property HasMerchantPerk Auto  
 
 Keyword Property VampireKeyword Auto
@@ -53,12 +54,36 @@ FormList Property VampireWeaponFormList Auto
 
 Perk Property MerchantPerk Auto
 
+Actor Property Malborn01 Auto
+Actor Property Malborn02 Auto
+
+Spell Property HandlerAlterationMasterQuest Auto
+Spell Property HandlerIllusionMasterQuest Auto
+Spell Property HandlerRestorationMasterQuest Auto
+Spell Property HandlerDestructionMasterQuest Auto
+Spell Property HandlerConjurationMasterQuest Auto
+
+;Квест Сибиллы
+Quest Property Favor109 Auto
+
 Actor Player
 
 Event OnInit()
 	Utility.Wait(5.0)
     Player = Game.GetPlayer()
+
+    ;Пробуем на старте игры выдать белый стат переносимого веса
+    Malborn01.SetActorValue("CarryWeight", 300.0)
+    Malborn02.SetActorValue("CarryWeight", 300.0)
+
     RegisterForMenu("StatsMenu")
+
+    ;Добавляем спелы обработчики на выполнение мастер квестов школл магии
+    Player.AddSpell(HandlerAlterationMasterQuest, false)
+    Player.AddSpell(HandlerIllusionMasterQuest, false)
+    Player.AddSpell(HandlerRestorationMasterQuest, false)
+    Player.AddSpell(HandlerDestructionMasterQuest, false)
+    Player.AddSpell(HandlerConjurationMasterQuest, false)
 EndEvent
 
 Event OnMenuOpen(string menuName)
@@ -77,6 +102,8 @@ EndEvent
 Event OnObjectEquipped(Form akBaseObject, ObjectReference akReference)
     Weapon weap = akBaseObject as Weapon
     if weap
+
+        ;Проверяется имеется ли у оружия кейворд вампирского, оружию с таким кейвордом не надо находиться в лисе. Если кейворда нет, проверяется есть ли оружие уже  листе и есть ли нужный чант на оружии, если чант есть и нет в листе - добавляет в лист.
         if !weap.HasKeyword(VampireWeaponKW)
             if !findWeaponInList(weap) && findVampireEnchantment(weap)
                 VampireWeaponFormList.AddForm(weap)
@@ -85,6 +112,7 @@ Event OnObjectEquipped(Form akBaseObject, ObjectReference akReference)
     endif
 EndEvent
 
+;Проверяет находится ли оружие в заданном листе
 bool Function findWeaponInList(Weapon weap)
     int index = VampireWeaponFormList.GetSize()
     While index
@@ -97,6 +125,7 @@ bool Function findWeaponInList(Weapon weap)
     return false
 EndFunction
 
+;Проверяет есть ли вампирская чарка на оружии и это оружие не имеет кейворда на невозможности разбирания на столе зачарования
 bool Function findVampireEnchantment(Weapon weap)
     Enchantment ench = weap.GetEnchantment()
     if ench
@@ -107,14 +136,19 @@ bool Function findVampireEnchantment(Weapon weap)
     return false
 EndFunction
 
+;Проверяется является ли игрок вампиров и выполнен ли квест Сибиллы на уничтожение вампира. Нужно для лвл листов торговцев.
 Function vampireCheck()
     If Player.HasKeyword(VampireKeyword)
         PlayerIsVampire.SetValueInt(0)
     Else
         PlayerIsVampire.SetValueInt(100)
     endif
+    If Favor109.GetStage() >= 20
+        SibillaQuestComplite.SetValueInt(0)
+    EndIf
 EndFunction
 
+;Проверяется наличие перка купца, для лвл листов торговцев.
 Function merchantPerkCheck()
     If Player.HasPerk(MerchantPerk)
         HasMerchantPerk.SetValueInt(0)
@@ -123,6 +157,7 @@ Function merchantPerkCheck()
     endif
 EndFunction
 
+;Переписанный хендлер на продажу заклинаний, теперь новые заклинания появляются в продаже когда взят перк, а не достигнуто нужное количество навыка.
 Function spellPerkCheck()
     if Player.HasPerk(AlterationAdept)
         PCAlterationAdept.SetValue(0)

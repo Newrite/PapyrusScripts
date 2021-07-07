@@ -62,20 +62,11 @@ ReferenceAlias Property Alias_Pedestal01 Auto
 ReferenceAlias Property Alias_Book02 Auto
 ;END ALIAS PROPERTY
 
-Message Property ChooseSpell Auto
-FormList Property ListOfMasterSpells auto
-
-function StartChoose()
-	int IndexSpell = ChooseSpell.Show()
-	Utility.Wait(1.0)
-	Game.GetPlayer().AddSpell(ListOfMasterSpells.GetAt(IndexSpell) as Spell, true)
-endfunction
 
 ;BEGIN FRAGMENT Fragment_2
 Function Fragment_2()
 ;BEGIN CODE
 CompleteAllObjectives()
-StartChoose()
 MGRitualDestBook.SetValue(0)
 VendorChest.AddItem(Blizzard, 1)
 VendorChest.AddItem(SpellTomeLightningStorm,1)

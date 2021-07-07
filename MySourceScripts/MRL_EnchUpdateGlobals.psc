@@ -59,7 +59,7 @@ Function updateGlobals()
     setGlobals(getStats())
 EndFunction
 
-Event OnEffectStart(Actor akCaster, Actor akTarget)
+Event OnEffectStart(Actor akTarget, Actor akCaster)
     _register = true
     caster = akTarget
     RegisterForSingleUpdate(5.0)

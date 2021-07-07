@@ -27,14 +27,6 @@ ReferenceAlias Property Alias_Drevis Auto
 ReferenceAlias Property Alias_Book3 Auto
 ;END ALIAS PROPERTY
 
-Message Property ChooseSpell Auto
-FormList Property ListOfMasterSpells auto
-
-function StartChoose()
-	int IndexSpell = ChooseSpell.Show()
-	Utility.Wait(1.0)
-	Game.GetPlayer().AddSpell(ListOfMasterSpells.GetAt(IndexSpell) as Spell, true)
-endfunction
 
 ;BEGIN FRAGMENT Fragment_1
 Function Fragment_1()
@@ -44,7 +36,6 @@ Game.GetPlayer().RemoveItem(Alias_book1.GetReference(),1)
 Game.GetPlayer().RemoveItem(Alias_book2.GetReference(),1)
 Game.GetPlayer().RemoveItem(Alias_book3.GetReference(),1)
 Game.GetPlayer().RemoveItem(Alias_book4.GetReference(),1)
-StartChoose()
 MGRitualIllBook.SetValue(0)
 VendorChest.Additem(SpellTomeMayhem,1)
 VendorChest.Additem(SpellTomeHarmony,1)

@@ -47,14 +47,6 @@ referencealias Property Alias_Ghost01 Auto
 referencealias Property Alias_Ghost03 Auto
 ;END ALIAS PROPERTY
 
-Message Property ChooseSpell Auto
-FormList Property ListOfMasterSpells auto
-
-function StartChoose()
-	int IndexSpell = ChooseSpell.Show()
-	Utility.Wait(1.0)
-	Game.GetPlayer().AddSpell(ListOfMasterSpells.GetAt(IndexSpell) as Spell, true)
-endfunction
 
 ;BEGIN FRAGMENT Fragment_10
 Function Fragment_10()
@@ -63,7 +55,6 @@ Alias_ItemContainer.GetReference().RemoveAllItems(Game.GetPlayer(), true, true)
 SetObjectiveCompleted(10)
 Alias_AugurDoor.GetReference().Lock(False)
 Alias_AugurDoor.GetReference().SetOpen()
-StartChoose()
 MGRitualAltBook.SetValue(0)
 RestorationVendorChest.AddItem(SpellTomeGuardianCircle,1)
 Stop()

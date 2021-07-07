@@ -32,14 +32,6 @@ referencealias Property Alias_DremoraAlias Auto
 referencealias Property Alias_MGHoldingChest Auto
 ;END ALIAS PROPERTY
 
-Message Property ChooseSpell Auto
-FormList Property ListOfMasterSpells auto
-
-function StartChoose()
-	int IndexSpell = ChooseSpell.Show()
-	Utility.Wait(1.0)
-	Game.GetPlayer().AddSpell(ListOfMasterSpells.GetAt(IndexSpell) as Spell, true)
-endfunction
 
 ;BEGIN FRAGMENT Fragment_10
 Function Fragment_10()
@@ -72,7 +64,6 @@ EndFunction
 Function Fragment_5()
 ;BEGIN CODE
 CompleteAllObjectives()
-StartChoose()
 Game.GetPlayer().AddItem(SigilStone, 1)
 AtrFrgDaedricRecipeChance.setValueInt(98)
 AtrFrgDaedricRecipeChestChance.setValueInt(95)

@@ -1,84 +1,154 @@
 scriptname MRL_CurseOfMagicka extends activemagiceffect
 
+;;;
+
 FormList Property listOfNovicePerks auto
 FormList Property listOfApprenticePerks auto
 FormList Property listOfAdeptPerks auto
 FormList Property listOfExpertPerks auto
 FormList Property listOfMasterPerks auto
-Spell Property cursedRegenSpell auto
+
+Spell Property CursedRegenSpell auto
+Spell Property CursedExplosion auto
+
 GlobalVariable Property gCurseDamage Auto
 GlobalVariable Property gCurseCost Auto
 GlobalVariable Property gCurseSummon Auto
+GlobalVariable Property gCurseMultiplay Auto
+
 Float Property MaxCurseDamage Auto
 Float Property MaxCurseSummon Auto
 Float Property MaxCurseCost Auto
+
 Keyword Property LichKeyword auto
-Keyword Property RitualSpellEffect auto
 
-actor cursedActor
-int LeftCastIndex = 0																;Used for function WaitCondition()
-int RightCastIndex = 1																;Used for function WaitCondition()
-int DualCastIndex = 2																;Used for function WaitCondition()
-Spell SpellLeft																		;The spell equipped in the player's left hand.
-Spell SpellRight		;The spell equipped in the player's right hand.											    		
+Actor CursedActor
 
-bool registerStage = true
+int iLeftCastIndex = 0
+int iRightCastIndex = 1
+int iDualCastIndex = 2
 
-bool Function IsConcentrated(Spell s)												;Returns true if the spell is a concentration spell. Otherwise returns false.
-	if (s.GetNthEffectMagicEffect(s.GetCostliestEffectIndex())).GetCastingType() == 2
+float fLichMultiplay = 1.0
+float fConstDamageExplosion = 50.0
+
+Spell SpellLeft
+Spell SpellRight
+
+string sCrusedValue = "EnchantingSkillAdvance"
+
+bool bRegisterStage = true
+
+;;;
+
+bool Function IsConcentratedSpell(Spell akSpell)
+
+	if (akSpell.GetNthEffectMagicEffect(akSpell.GetCostliestEffectIndex())).GetCastingType() == 2
 		return 1
-	else
-		return 0
 	endif
+
+	return 0
+
 endFunction
 
-bool Function IsRitualSpell(Spell s)												;Returns true if the spell is a ritual spell (FF or concentration). Otherwise returns false.
-	if (s.GetNthEffectMagicEffect(0)).HasKeyword(RitualSpellEffect)
-		return 1
-	else
-		return 0
+Function UpdateSpells()
+
+	if (CursedActor.GetEquippedObject(0) as Spell)
+		SpellLeft = CursedActor.GetEquippedSpell(0)
 	endif
+
+	if (CursedActor.GetEquippedObject(1) as Spell)
+		SpellRight = CursedActor.GetEquippedSpell(1)
+	endif
+
+EndFunction
+
+bool Function WaitCondition(int index)
+
+	if index == iLeftCastIndex
+		return CursedActor.GetAnimationVariableBool("IsCastingLeft") && !(CursedActor.GetAnimationVariableBool("IsCastingRight") && IsConcentratedSpell(SpellRight))
+	endif
+
+	if index == iRightCastIndex
+		return !(CursedActor.GetAnimationVariableBool("IsCastingLeft") && IsConcentratedSpell(SpellLeft)) && CursedActor.GetAnimationVariableBool("IsCastingRight")
+	endif
+
+	if index == iDualCastIndex
+		return CursedActor.GetAnimationVariableBool("IsCastingLeft") && CursedActor.GetAnimationVariableBool("IsCastingRight") || CursedActor.GetAnimationVariableBool("IsCastingDual")
+	endif
+
+	return 0
+
 endFunction
 
-float function getSpellHalfCostPerk(perk spellPerk)
+Function OverExplosion()
+
+	float ExplosionValue = CursedActor.GetActorValue("Health") as Float / CursedActor.GetActorValuePercentage("Health") as Float * 0.5
+
+	CursedExplosion.SetNthEffectMagnitude(0, fConstDamageExplosion + ExplosionValue)
+
+	CursedExplosion.Cast(CursedActor, CursedActor)
+	CursedActor.ModActorValue(sCrusedValue, -100.0)
+
+EndFunction
+
+Function ApplyConcCursed(float Cost, int WaitIndex)
+
+	while WaitCondition(WaitIndex) && CursedActor.IsInCombat()
+
+		if CursedActor.GetActorValue(sCrusedValue) as Float < 100.0
+			CursedActor.ModActorValue(sCrusedValue, Cost)
+			CursedActor.DamageActorValue("Stamina", Cost)
+		endif
+
+		if CursedActor.GetActorValue(sCrusedValue) as Float >= 100.0
+			OverExplosion()
+		endif
+
+		Utility.Wait(1.0)
+
+	endwhile
+
+endFunction
+
+float function CursedValueFromPerk(Perk akPerk)
 
 	Int iIndex = listOfNovicePerks.GetSize() as int
     While iIndex
         iIndex -= 1
-		if spellPerk == listOfNovicePerks.GetAt(iIndex) As Perk
-			return 2.0
+		if akPerk == listOfNovicePerks.GetAt(iIndex) As Perk
+			return 1.0
 		endif
     EndWhile
 	
 	iIndex = listOfApprenticePerks.GetSize() as int
     While iIndex
         iIndex -= 1
-		if spellPerk == listOfApprenticePerks.GetAt(iIndex) As Perk
-			return 4.0
+		if akPerk == listOfApprenticePerks.GetAt(iIndex) As Perk
+			return 2.5
 		endif
     EndWhile
 	
 	iIndex = listOfAdeptPerks.GetSize() as int
     While iIndex
         iIndex -= 1
-		if spellPerk == listOfAdeptPerks.GetAt(iIndex) As Perk
-			return 6.0
+		if akPerk == listOfAdeptPerks.GetAt(iIndex) As Perk
+			return 4.0
 		endif
     EndWhile
 	
 	iIndex = listOfExpertPerks.GetSize() as int
     While iIndex
         iIndex -= 1
-		if spellPerk == listOfExpertPerks.GetAt(iIndex) As Perk
-			return 8.0
+		if akPerk == listOfExpertPerks.GetAt(iIndex) As Perk
+			return 5.5
 		endif
     EndWhile
 	
 	iIndex = listOfMasterPerks.GetSize() as int
     While iIndex
         iIndex -= 1
-		if spellPerk == listOfMasterPerks.GetAt(iIndex) As Perk
-			return 10.0
+		if akPerk == listOfMasterPerks.GetAt(iIndex) As Perk
+			return 7.0
 		endif
     EndWhile
 	
@@ -86,45 +156,10 @@ float function getSpellHalfCostPerk(perk spellPerk)
 	
 endfunction
 
-Function UpdateSpells()																;Updates the spells that the player has equipped
-	if (cursedActor.GetEquippedObject(0) as Spell)			
-		SpellLeft = cursedActor.GetEquippedSpell(0)
-	endif
-	if (cursedActor.GetEquippedObject(1) as Spell)
-		SpellRight = cursedActor.GetEquippedSpell(1)
-	endif
-endFunction
+function UpdateGlobals()
 
-bool Function WaitCondition(int index)												;Returns the condition for applying the health cost while channeling concentration spells. Use the index variables for the parameter.
-	if (index == LeftCastIndex)
-		return cursedActor.GetAnimationVariableBool("IsCastingLeft") && !(cursedActor.GetAnimationVariableBool("IsCastingRight") && IsConcentrated(SpellRight))
-	elseif (index == RightCastIndex)
-		return !(cursedActor.GetAnimationVariableBool("IsCastingLeft") && IsConcentrated(SpellLeft)) && cursedActor.GetAnimationVariableBool("IsCastingRight")
-	elseif (index == DualCastIndex)
-		return cursedActor.GetAnimationVariableBool("IsCastingLeft") && cursedActor.GetAnimationVariableBool("IsCastingRight") || cursedActor.GetAnimationVariableBool("IsCastingDual")
-	else
-		return 0
-	endif
-endFunction
+	float EnchantingSkillAdvance = cursedActor.GetActorValue(sCrusedValue) as Float
 
-Function ApplyConcCursed(float Cost, int WaitIndex)
-	cursedActor.ModActorValue("EnchantingSkillAdvance", Cost)
-	cursedActor.DamageActorValue("Stamina", Cost)
-	;Debug.Notification("ApplyConcCursed"+Cost)
-	while (WaitCondition(WaitIndex))
-		;Wait for the player to change the casting conditions.
-		Utility.Wait(1.0)
-		if cursedActor.GetActorValue("EnchantingSkillAdvance") as Float >= 100.0 || !cursedActor.IsInCombat()
-			return
-		endif
-		cursedActor.ModActorValue("EnchantingSkillAdvance", Cost)
-		cursedActor.DamageActorValue("Stamina", Cost)
-		;Debug.Notification("fromwhile"+Cost)
-	endwhile
-endFunction
-
-function updateGlobals()
-	float EnchantingSkillAdvance = cursedActor.GetActorValue("EnchantingSkillAdvance") as Float
 	if EnchantingSkillAdvance >= 100.0
 		gCurseDamage.SetValue(MaxCurseDamage)
 		gCurseCost.SetValue(MaxCurseCost)
@@ -134,106 +169,140 @@ function updateGlobals()
 		gCurseCost.SetValue(EnchantingSkillAdvance * 0.5)
 		gCurseSummon.SetValue(EnchantingSkillAdvance * 0.25)
 	endif
+
 endFunction
 
-Event OnObjectEquipped(Form akBaseObject, ObjectReference akReference)				;When something is equipped: 
-	UpdateSpells()																	;Update spells.
+Function SpellCurse(Form akSpell, float CurseValue)
+
+	if IsConcentratedSpell(akSpell as Spell)
+
+		bool bDual = CursedActor.GetAnimationVariableBool("IsCastingDual")
+
+		if bDual && IsConcentratedSpell(SpellRight)
+			ApplyConcCursed(CurseValue / 2.0, iDualCastIndex)
+		endif
+
+		if akSpell == SpellLeft && CursedActor.GetAnimationVariableBool("IsCastingLeft")
+			ApplyConcCursed(CurseValue / 2.0, iLeftCastIndex)
+		endif
+
+		if akSpell == SpellRight && CursedActor.GetAnimationVariableBool("IsCastingRight")
+			ApplyConcCursed(CurseValue / 2.0, iRightCastIndex)
+		endif
+
+		CursedRegenSpell.SetNthEffectMagnitude(0, CurseValue * 3.0)
+		CursedRegenSpell.Cast(CursedActor, CursedActor)
+
+	else
+		CursedActor.ModActorValue(sCrusedValue, CurseValue as Float)
+		CursedActor.DamageActorValue("Stamina", CurseValue as Float)
+		CursedRegenSpell.SetNthEffectMagnitude(0, CurseValue * 3.0)
+		CursedRegenSpell.Cast(CursedActor, CursedActor)
+		
+		if CursedActor.GetActorValue(sCrusedValue) as Float >= 100.0
+			OverExplosion()
+		endif
+
+	endif
+
+
+
+EndFunction
+
+Function EnchantmentCurse()
+
+	float EnchantingSkillAdvance = CursedActor.GetActorValue(sCrusedValue) as Float
+
+	if (EnchantingSkillAdvance < 5.0) && (EnchantingSkillAdvance > 0)
+		CursedActor.ModActorValue(sCrusedValue, -EnchantingSkillAdvance)
+	endif
+	
+	if EnchantingSkillAdvance >= 5.0 
+		CursedActor.ModActorValue(sCrusedValue, -(1.0 + ((EnchantingSkillAdvance / 60.0) * (EnchantingSkillAdvance / 60.0))) * 4.0)
+	endif
+
+EndFunction
+
+;;;
+
+Event OnObjectEquipped(Form akBaseObject, ObjectReference akReference)
+
+	UpdateSpells()
+
 endEvent
 
 Event OnSpellCast(Form akSpell)
-	;Debug.Notification("Proc EventSpellCast")
-	;Debug.MessageBox("Proc EventSpellCast")
-	if cursedActor.IsInCombat()
-		if cursedActor.GetActorValue("EnchantingSkillAdvance") as Float < 100.0
+
+	if CursedActor.IsInCombat()
+
+		if CursedActor.GetActorValue("EnchantingSkillAdvance") as Float < 100.0
 			Spell spellCast = akSpell as Spell
+
 			if spellCast
-				;Debug.Notification("This is Spell")
-				float varCurse = getSpellHalfCostPerk(spellCast.GetPerk() as Perk)
-				if varCurse > 0.1
-					if cursedActor.HasKeyword(LichKeyword)
-						varCurse = varCurse / 2.0
-					endif
-					;Debug.Notification("1:" + varCurse)
-					if (IsConcentrated(spellCast))
-						;Debug.Notification("Curse Stack Conc")
-						bool bDual = (cursedActor.GetAnimationVariableBool("IsCastingLeft") && cursedActor.GetAnimationVariableBool("IsCastingRight") || cursedActor.GetAnimationVariableBool("IsCastingDual"))	
-						if(IsRitualSpell(spellCast) && bDual)								
-							ApplyConcCursed(varCurse / 2.0, DualCastIndex)
-						elseif(bDual && IsConcentrated(SpellRight) && IsConcentrated(SpellLeft))
-							ApplyConcCursed(varCurse / 2.0, DualCastIndex)
-							if cursedActor.GetAnimationVariableBool("IsCastingLeft")
-								spellCast = SpellLeft
-							elseif cursedActor.GetAnimationVariableBool("IsCastingRight")
-								spellCast = SpellRight
-							endif
-						endif 
-						if(spellCast == SpellLeft && cursedActor.GetAnimationVariableBool("IsCastingLeft"))
-							ApplyConcCursed(varCurse / 2.0, LeftCastIndex)
-						elseif (spellCast == SpellRight && cursedActor.GetAnimationVariableBool("IsCastingRight"))
-							ApplyConcCursed(varCurse / 2.0, RightCastIndex)
-						endif
-						cursedRegenSpell.SetNthEffectMagnitude(0, varCurse * 2.5)
-						cursedRegenSpell.Cast(cursedActor, cursedActor)
-					else
-						;Debug.Notification("Curse FF Stack")
-						cursedActor.ModActorValue("EnchantingSkillAdvance", varCurse as Float)
-						cursedActor.DamageActorValue("Stamina", varCurse as Float)
-						cursedRegenSpell.SetNthEffectMagnitude(0, varCurse * 2.5)
-						cursedRegenSpell.Cast(cursedActor, cursedActor)
-					endif
+
+				float CurseValue = CursedValueFromPerk(spellCast.GetPerk() as Perk)
+				if CurseValue > 0.1
+					SpellCurse(akSpell, CurseValue * gCurseMultiplay.GetValue() as Float * fLichMultiplay)
 				endif
+
 			endif
+
 		endif
+
 		Enchantment enchCast = akSpell as Enchantment
+
 		if enchCast
-			;Debug.Notification("This is Enchantment")
-			float EnchantingSkillAdvance = cursedActor.GetActorValue("EnchantingSkillAdvance") as Float
-			if (EnchantingSkillAdvance < 5.0) && (EnchantingSkillAdvance > 0)
-				cursedActor.ModActorValue("EnchantingSkillAdvance", -EnchantingSkillAdvance)
-			endif
-			if EnchantingSkillAdvance >= 5.0 
-				cursedActor.ModActorValue("EnchantingSkillAdvance", -(1.0 + ((EnchantingSkillAdvance / 60.0) * (EnchantingSkillAdvance / 60.0))) * 4.0)
-			endif
+			EnchantmentCurse()
 		endif
+
 	endif
+
 endEvent
 
 Event OnPlayerBowShot(Weapon akWeapon, Ammo akAmmo, float afPower, bool abSunGazing)
+
 	if cursedActor.IsInCombat()
+
 		Enchantment bowEnch = akWeapon.GetEnchantment()
+
 		if bowEnch
-			;Debug.Notification("This is enchBowShot")
-			float EnchantingSkillAdvance = cursedActor.GetActorValue("EnchantingSkillAdvance") as Float
-			if (EnchantingSkillAdvance < 5.0) && (EnchantingSkillAdvance > 0)
-				cursedActor.ModActorValue("EnchantingSkillAdvance", -EnchantingSkillAdvance)
-			endif
-			if EnchantingSkillAdvance >= 5.0 
-				cursedActor.ModActorValue("EnchantingSkillAdvance", -(1.0 + ((EnchantingSkillAdvance / 60.0) * (EnchantingSkillAdvance / 60.0))) * 4.0)
-			endif
+			EnchantmentCurse()
 		endif
+
 	endif
+
 EndEvent
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
 
-		registerStage = true
-		cursedActor = akCaster
-		updateGlobals()
+		bRegisterStage = true
+		CursedActor = akCaster
+		UpdateGlobals()
 		RegisterForSingleUpdate(3.0)
 		
 endEvent
 
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
-	registerStage = false
+
+	bRegisterStage = false
+
 endEvent
 
 Event OnUpdate()
-	if registerStage == false
+
+	if bRegisterStage == false
 		UnregisterForUpdate()
 		return
 	else
-		updateGlobals()
+		UpdateGlobals()
+		if CursedActor.HasKeyword(LichKeyword)
+			fLichMultiplay = 0.5
+		else
+			fLichMultiplay = 1.0
+		endif
 	endif
+
 	RegisterForSingleUpdate(3.0)
+
 EndEvent
