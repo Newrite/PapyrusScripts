@@ -9,7 +9,7 @@
             "options": {},
             "args": [
                 {
-                    "value": ".\\MySourceScripts\\MRL_CurseOfMagicka.psc",
+                    "value": ".\\MySourceScripts\\MRL_EnchJustCastSpellSelf.psc",
                     "quoting": "strong"
                 },
                 {
@@ -37,7 +37,7 @@
             "options": {},
             "args": [
                 {
-                    "value": ".\\Champollion\\ToDecompile\\uimenubase.pex",
+                    "value": ".\\Champollion\\ToDecompile\\MCT_MCM.pex",
                     "quoting": "strong"
                 },
                 {

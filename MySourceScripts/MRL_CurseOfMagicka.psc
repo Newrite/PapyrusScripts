@@ -84,7 +84,10 @@ Function OverExplosion()
 
 	float ExplosionValue = CursedActor.GetActorValue("Health") as Float / CursedActor.GetActorValuePercentage("Health") as Float * 0.5
 
-	CursedExplosion.SetNthEffectMagnitude(0, fConstDamageExplosion + ExplosionValue)
+	float fDiffMultHPToPCL = Game.GetGameSettingfloat("fDiffMultHPToPCL")
+
+	CursedExplosion.SetNthEffectMagnitude(0, (fConstDamageExplosion + ExplosionValue) / fDiffMultHPToPCL)
+	CursedExplosion.SetNthEffectMagnitude(1, (fConstDamageExplosion + ExplosionValue) / fDiffMultHPToPCL)
 
 	CursedExplosion.Cast(CursedActor, CursedActor)
 	CursedActor.ModActorValue(sCrusedValue, -100.0)
@@ -124,7 +127,7 @@ float function CursedValueFromPerk(Perk akPerk)
     While iIndex
         iIndex -= 1
 		if akPerk == listOfApprenticePerks.GetAt(iIndex) As Perk
-			return 2.5
+			return 2.0
 		endif
     EndWhile
 	
@@ -132,7 +135,7 @@ float function CursedValueFromPerk(Perk akPerk)
     While iIndex
         iIndex -= 1
 		if akPerk == listOfAdeptPerks.GetAt(iIndex) As Perk
-			return 4.0
+			return 3.0
 		endif
     EndWhile
 	
@@ -140,7 +143,7 @@ float function CursedValueFromPerk(Perk akPerk)
     While iIndex
         iIndex -= 1
 		if akPerk == listOfExpertPerks.GetAt(iIndex) As Perk
-			return 5.5
+			return 4.0
 		endif
     EndWhile
 	
@@ -148,7 +151,7 @@ float function CursedValueFromPerk(Perk akPerk)
     While iIndex
         iIndex -= 1
 		if akPerk == listOfMasterPerks.GetAt(iIndex) As Perk
-			return 7.0
+			return 5.0
 		endif
     EndWhile
 	
@@ -165,7 +168,7 @@ function UpdateGlobals()
 		gCurseCost.SetValue(MaxCurseCost)
 		gCurseSummon.SetValue(MaxCurseSummon)
 	else
-		gCurseDamage.SetValue(EnchantingSkillAdvance * 0.2)
+		gCurseDamage.SetValue(EnchantingSkillAdvance * 0.5)
 		gCurseCost.SetValue(EnchantingSkillAdvance * 0.5)
 		gCurseSummon.SetValue(EnchantingSkillAdvance * 0.25)
 	endif
@@ -242,7 +245,8 @@ Event OnSpellCast(Form akSpell)
 
 				float CurseValue = CursedValueFromPerk(spellCast.GetPerk() as Perk)
 				if CurseValue > 0.1
-					SpellCurse(akSpell, CurseValue * gCurseMultiplay.GetValue() as Float * fLichMultiplay)
+					;;SpellCurse(akSpell, CurseValue * gCurseMultiplay.GetValue() as Float * fLichMultiplay)
+					SpellCurse(akSpell, CurseValue * fLichMultiplay)
 				endif
 
 			endif

@@ -26,8 +26,8 @@ EndFunction
 ;/
     stats[0] - Шанс крита
     stats[1] - Мультипликатор крита
-    stats[2] - Мультипликатор эффективности чар на оружии (не относится к криту
-    stats[3] - Шанс критической эффективности чар на оружии (по-умолчанию 1.5х)
+    stats[2] - Мультипликатор эффективности чар на оружии (не относится к криту)
+    stats[3] - Уменьшение расхода чар на оружии
 /;
 
 Function setGlobals(float[] stats)
@@ -37,20 +37,20 @@ Function setGlobals(float[] stats)
     else
         gCritChance.SetValue(100.0)
     endIf
-    if stats[1] < 200.0
+    if stats[1] < 100.0
         gCritMult.SetValue(stats[1])
     else
-        gCritMult.SetValue(200.0)
+        gCritMult.SetValue(100.0)
     endIf
-    if stats[2] < 200.0
+    if stats[2] < 100.0
         gEnchDamage.SetValue(stats[2])
     else
-        gEnchDamage.SetValue(200.0)
+        gEnchDamage.SetValue(100.0)
     endIf
-    if stats[3] < 100.0
+    if stats[3] < 80.0
         gEnchDamageCritChance.SetValue(stats[3])
     else
-        gEnchDamageCritChance.SetValue(100.0)
+        gEnchDamageCritChance.SetValue(80.0)
     endIf
 EndFunction
 

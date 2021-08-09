@@ -9,7 +9,10 @@ Int Property ScaleWithoutArmorWithoutPerk Auto
 
 Keyword Property ArmorLight Auto
 Keyword Property ArmorHeavy Auto
+Keyword Property ArmorShield Auto
 
+
+Perk Property BlankCheckPerk Auto
 Perk Property ImprovedMagicArmor Auto
 
 int BaseManaScale = 0
@@ -22,12 +25,15 @@ bool havePerk = false
 actor effectTarget
 
 Function checkArmorPerk()
+    If !effectTarget.HasPerk(BlankCheckPerk)
+        
+        if effectTarget.WornHasKeyword(ArmorLight) || effectTarget.WornHasKeyword(ArmorHeavy)
+            haveArmor = true
+        else
+            haveArmor = false
+        endif
 
-    if effectTarget.WornHasKeyword(ArmorLight) || effectTarget.WornHasKeyword(ArmorHeavy)
-        haveArmor = true
-    else
-        haveArmor = false
-    endif
+    EndIf
 
     if effectTarget.HasPerk(ImprovedMagicArmor)
         havePerk = true
@@ -56,6 +62,7 @@ Function changeDamageResist()
     damageResistBust = effectTarget.GetBaseAV("Magicka") * BaseManaScale
     MagicArmorSpell.SetNthEffectMagnitude(0, damageResistBust)
     effectTarget.AddSpell(MagicArmorSpell, false)
+    
 
 EndFunction
 
@@ -71,7 +78,8 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 endevent
 
 Event OnObjectEquipped(Form akBaseObject, ObjectReference akReference)
-    if akBaseObject.HasKeyword(ArmorHeavy) || akBaseObject.HasKeyword(ArmorLight)
+    Utility.Wait(1.5)
+    if ( akBaseObject.HasKeyword(ArmorHeavy) || akBaseObject.HasKeyword(ArmorLight) ) && !akBaseObject.HasKeyword(ArmorShield)
         Utility.Wait(1.0)
         effectTarget.RemoveSpell(MagicArmorSpell)
         checkArmorPerk()
@@ -81,7 +89,8 @@ Event OnObjectEquipped(Form akBaseObject, ObjectReference akReference)
 EndEvent
 
 Event OnObjectUnequipped(Form akBaseObject, ObjectReference akReference)
-    if akBaseObject.HasKeyword(ArmorHeavy) || akBaseObject.HasKeyword(ArmorLight)
+    Utility.Wait(1.5)
+    if ( akBaseObject.HasKeyword(ArmorHeavy) || akBaseObject.HasKeyword(ArmorLight) ) && !akBaseObject.HasKeyword(ArmorShield)
         effectTarget.RemoveSpell(MagicArmorSpell)
         checkArmorPerk()
         getBaseManaScale()
