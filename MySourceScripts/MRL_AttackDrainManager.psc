@@ -43,7 +43,7 @@ ObjectReference TargetRef
 Float DrawnValue = 0.0
 
 ;Переменные для проверки состояния и расхода ресурса арбалета
-;Bool IsReload = false
+Bool IsReload = false
 Float ReloadValue = 0.0
 
 ;Актор велью для модификатором удешевления силовых атак
@@ -58,7 +58,7 @@ String PowerAttackSpend = "marksmanskilladvance"
 Function MeleeWeaponCalc(Weapon Weap, bool PowerAttack)
 
     ;Рассчет значения расхода ресурса
-    float DrainValue = GetDrainValue(GetEquippedWeaponWeight(Weap), GetPowerAttackMult(PowerAttack))
+    float DrainValue = GetDrainValue(GetEquippedWeaponWeight(Weap) * 0.5, GetPowerAttackMult(PowerAttack))
 
     ;Проверка расходует ли оружие два стата сразу (стамина + доп стат или только один из)
     if Weap.HasKeyword(DualWeapon)
@@ -105,7 +105,7 @@ EndFunction
 Function BowWeaponCalc(Weapon Weap)
 
     ;Рассчет значения расхода ресурса
-    DrawnValue = GetDrainValueRanger(GetEquippedWeaponWeight(Weap)) / 2.0
+    DrawnValue = GetDrainValueRanger(GetEquippedWeaponWeight(Weap)) / 1.5
 
     ;Проверка расходует ли оружие два стата сразу (стамина + доп стат или только один из)
     if Weap.HasKeyword(DualWeapon)
@@ -153,9 +153,9 @@ Function CrossBowWeaponCalc(Weapon Weap)
 
     ;Рассчет значения расхода ресурса с учетом перка
     if Target.HasPerk(HotReloadPerk)
-        ReloadValue = (GetDrainValueRanger(GetEquippedWeaponWeight(Weap)) * 0.7) / 2.0
+        ReloadValue = (GetDrainValueRanger(GetEquippedWeaponWeight(Weap)) * 0.7) / 1.5
     else
-        ReloadValue = GetDrainValueRanger(GetEquippedWeaponWeight(Weap)) / 2.0
+        ReloadValue = GetDrainValueRanger(GetEquippedWeaponWeight(Weap)) / 1.5
     endif
 
     ;Проверка расходует ли оружие два стата сразу (стамина + доп стат или только один из)
@@ -205,11 +205,24 @@ float Function GetDrainValue(float Weight, float PowerAttackMult)
     ;Учитываем значение Infamy если оно больше 1.0
     float infamy = Target.GetActorValue("infamy")
 
-    ;Бонус расхода от силовой рассчитывается отдельно
-    if infamy > 1.0
-        return ((Weight * infamy / 1.5) + ( (Weight * infamy / 1.5) * PowerAttackMult )) * GlobalMult.GetValue() as Float
+    ;Проверка на силовую
+    if PowerAttackMult > 0.0
+
+        ;Бонус расхода от силовой рассчитывается отдельно
+        if infamy > 1.0
+            return ((Weight * infamy) + (Weight * infamy * PowerAttackMult ) + (10.0 + (1.0 - (Weight * 2.0 / 100.0)))) *  GlobalMult.GetValue() as Float
+        else
+            return (Weight + (Weight * PowerAttackMult ) + (10.0 + (1.0 - (Weight * 2.0 / 100.0)))) * GlobalMult.GetValue() as Float
+        endif
+
     else
-        return ((Weight / 1.5) + ( (Weight / 1.5) * PowerAttackMult )) * GlobalMult.GetValue() as Float
+
+        if infamy > 1.0
+            return ((Weight * infamy) + (5.0 + (1.0 - (Weight * 2.0 / 100.0)))) *  GlobalMult.GetValue() as Float
+        else
+            return (Weight + (5.0 + (1.0 - (Weight * 2.0 / 100.0)))) * GlobalMult.GetValue() as Float
+        endif
+
     endif
 
 EndFunction
@@ -257,8 +270,8 @@ float Function GetPowerAttackMult(bool PowerAttack)
         ;Рассчет мультипликатора на силовую учитывая специальный актор велью который определяет уменьшение или увеличения расхода на силовые
         float PowerValue = Target.GetActorValue(PowerAttackSpend) as float
 
-        if PowerValue >= 100.0
-            return 0.0
+        if PowerValue > 75.0
+            PowerValue = 75.0
         endif
 
         return PowerMod * (1.0 - ( PowerValue / 100.0 ))
@@ -282,6 +295,35 @@ Function DefaultDualDrain(string ActorValue, float DrainValue)
 
 EndFunction
 
+;Функции регистрации и отмены регистрации анимаций
+Function UnregisterAll()
+
+    UnregisterForAnimationEvent(TargetRef, "WeaponSwing")
+	UnregisterForAnimationEvent(TargetRef, "WeaponLeftSwing")
+	UnregisterForAnimationEvent(TargetRef, "bowDrawStart")
+	UnregisterForAnimationEvent(TargetRef, "arrowRelease")
+    UnregisterForAnimationEvent(TargetRef, "bowReset")
+	UnregisterForAnimationEvent(TargetRef, "reload")
+	UnregisterForAnimationEvent(TargetRef, "ReloadFast")
+	UnregisterForAnimationEvent(TargetRef, "reloadStop")
+    UnregisterForAnimationEvent(TargetRef, "JumpUp")
+
+EndFunction
+
+Function RegisterAll()
+
+    RegisterForAnimationEvent(TargetRef, "WeaponSwing")
+	RegisterForAnimationEvent(TargetRef, "WeaponLeftSwing")
+	RegisterForAnimationEvent(TargetRef, "bowDrawStart")
+	RegisterForAnimationEvent(TargetRef, "arrowRelease")
+    RegisterForAnimationEvent(TargetRef, "bowReset")
+	RegisterForAnimationEvent(TargetRef, "reload")
+	RegisterForAnimationEvent(TargetRef, "ReloadFast")
+	RegisterForAnimationEvent(TargetRef, "reloadStop")
+    RegisterForAnimationEvent(TargetRef, "JumpUp")
+    
+EndFunction
+
 
 ;------
 ;ЭВЕНТЫ
@@ -293,15 +335,18 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	Target = akTarget
 	TargetRef = akTarget as ObjectReference
 
-    RegisterForAnimationEvent(TargetRef, "WeaponSwing")
-	RegisterForAnimationEvent(TargetRef, "WeaponLeftSwing")
-	RegisterForAnimationEvent(TargetRef, "bowDrawStart")
-	RegisterForAnimationEvent(TargetRef, "arrowRelease")
-    RegisterForAnimationEvent(TargetRef, "bowReset")
-	RegisterForAnimationEvent(TargetRef, "reload")
-	RegisterForAnimationEvent(TargetRef, "ReloadFast")
-	RegisterForAnimationEvent(TargetRef, "reloadStop")
-    RegisterForAnimationEvent(TargetRef, "JumpUp")
+    Utility.WaitMenuMode(0.25)
+    RegisterAll()
+
+EndEvent
+
+;Перегистрируем при смене расы
+Event OnRaceSwitchComplete()
+
+	Utility.Wait(0.25)
+	UnregisterAll()
+	Utility.Wait(0.25)
+	RegisterAll()
 
 EndEvent
 
@@ -360,11 +405,13 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 
     endif
 
+
     if type == 12 ;Это арбалет
 
         ;Начало перезарядки, устанавливаем что идет перезарядка и начинаем дрейн ресурса
         if asEventName == "reload" || asEventName == "ReloadFast"
 
+            IsReload = true
             CrossBowWeaponCalc(Target.GetEquippedWeapon())
             return
 
@@ -373,9 +420,10 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
         ;Небольшая подстраховка, болт выпущен значит дрейна и перезарядки точно нет, также сжираем доп ресурс за болты крови \ магии через каст спела в котором находятся все нужные эффекты (немного разгружаем папирус и расширяем функциональность)
         if asEventName == "arrowRelease"
 
-            ReloadValue = 0.0
-            GotoState("")
-            SpellForArrowCost.Cast(Target, Target)
+            if !IsReload
+                SpellForArrowCost.Cast(Target, Target)
+            endif
+            
             return
 
         endif
@@ -383,6 +431,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
         ;Перезарядка окончена, останавливаем дрейн и меняем переменную
         if asEventName == "reloadStop"
             
+            IsReload = false
             ReloadValue = 0.0
             GotoState("")
             return
@@ -413,15 +462,7 @@ EndEvent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
 
-    UnregisterForAnimationEvent(TargetRef, "WeaponSwing")
-	UnregisterForAnimationEvent(TargetRef, "WeaponLeftSwing")
-	UnregisterForAnimationEvent(TargetRef, "bowDrawStart")
-	UnregisterForAnimationEvent(TargetRef, "arrowRelease")
-    UnregisterForAnimationEvent(TargetRef, "bowReset")
-	UnregisterForAnimationEvent(TargetRef, "reload")
-	UnregisterForAnimationEvent(TargetRef, "ReloadFast")
-	UnregisterForAnimationEvent(TargetRef, "reloadStop")
-    UnregisterForAnimationEvent(TargetRef, "JumpUp")
+    UnregisterAll()
     
 EndEvent
 
@@ -519,6 +560,18 @@ endState
 ;Стейты на расход разных ресурсов при перезарядке арбалета
 state CrossBowReloadHealth
 
+    Event OnObjectUnequipped(Form akBaseObject, ObjectReference akReference)
+
+        if akBaseObject as Weapon
+
+            ReloadValue = 0.0
+            IsReload = false
+            GoToState("")
+
+        endif
+
+    endEvent
+
 	function OnUpdate()
 
         DefaultDrain(HealthValueString, ReloadValue * GlobalUpdateTimeCrossBow.GetValue() as Float)
@@ -535,6 +588,18 @@ state CrossBowReloadHealth
 endState
 
 state CrossBowReloadStamina
+
+    Event OnObjectUnequipped(Form akBaseObject, ObjectReference akReference)
+
+        if akBaseObject as Weapon
+
+            ReloadValue = 0.0
+            IsReload = false
+            GoToState("")
+
+        endif
+
+    endEvent
 
 	function OnUpdate()
 
@@ -553,6 +618,18 @@ endState
 
 state CrossBowReloadMagicka
 
+    Event OnObjectUnequipped(Form akBaseObject, ObjectReference akReference)
+
+        if akBaseObject as Weapon
+
+            ReloadValue = 0.0
+            IsReload = false
+            GoToState("")
+
+        endif
+
+    endEvent
+
 	function OnUpdate()
 
         DefaultDrain(MagickaValueString, ReloadValue * GlobalUpdateTimeCrossBow.GetValue() as Float)
@@ -570,6 +647,18 @@ endState
 
 state CrossBowReloadMagickaStamina
 
+    Event OnObjectUnequipped(Form akBaseObject, ObjectReference akReference)
+
+        if akBaseObject as Weapon
+
+            ReloadValue = 0.0
+            IsReload = false
+            GoToState("")
+
+        endif
+
+    endEvent
+
 	function OnUpdate()
 
         DefaultDualDrain(MagickaValueString, (ReloadValue * GlobalUpdateTimeCrossBow.GetValue() as Float) / 2.0)
@@ -586,6 +675,18 @@ state CrossBowReloadMagickaStamina
 endState
 
 state CrossBowReloadHealthStamina
+
+    Event OnObjectUnequipped(Form akBaseObject, ObjectReference akReference)
+
+        if akBaseObject as Weapon
+
+            ReloadValue = 0.0
+            IsReload = false
+            GoToState("")
+
+        endif
+
+    endEvent
 
 	function OnUpdate()
 

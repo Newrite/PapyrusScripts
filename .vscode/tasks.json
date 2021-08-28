@@ -9,11 +9,11 @@
             "options": {},
             "args": [
                 {
-                    "value": ".\\MySourceScripts\\MRL_EnchJustCastSpellSelf.psc",
+                    "value": ".\\MySourceScripts\\MRL_BosmerMasterRace.psc",
                     "quoting": "strong"
                 },
                 {
-                    "value": "-import=.\\Resources\\SKSE;.\\Resources\\GameSource;.\\Resources\\GameSource\\Dawnguard;.\\Resources\\GameSource\\Hearthfire;.\\Resources\\GameSource\\Dragonborn;.\\MySourceScripts",
+                    "value": "-import=.\\Resources\\SKSE;.\\Resources\\GameSource;.\\Resources\\GameSource\\Dawnguard;.\\Resources\\GameSource\\Hearthfire;.\\Resources\\GameSource\\Dragonborn;.\\MySourceScripts;.\\Resources\\requiem",
                     "quoting": "strong"
                 },
                 {

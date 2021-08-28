@@ -26,8 +26,6 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 EndEvent
 
 Event OnUpdate()
-
-    Blocker.EvaluatePackage
     
     if RegisterStage
 

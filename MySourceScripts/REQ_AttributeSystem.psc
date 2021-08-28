@@ -120,6 +120,37 @@ Function UpdateAttributeBonuses()
 	EndWhile
 EndFunction
 
+float Function CalcStat(float StatValue)
+
+	if StatValue < 0.0
+		return 0.0 
+	endif
+	if StatValue > 100.0 
+		return 100.0 + ((StatValue - 100.0) / 2.0)
+	endIf
+	if StatValue > 150.0
+		return 125.0
+	endIf
+
+EndFunction
+
+Function UpdateAttributeBonuses2()
+	Int i = 0
+	Float magicka = CalcStat(Player.GetBaseAV("Magicka") - 100.0)
+	Float stamina = CalcStat(Player.GetBaseAV("Stamina") - 100.0)
+	Float health = CalcStat(Player.GetBaseAV("Health") - 100.0)
+
+	Float weighted = 0.0
+	While i < derived.length
+		Player.ModAV(derived[i], -Modifiers[i])
+		weighted = weight_health[i] * health + weight_magicka[i] * magicka + weight_stamina[i] * stamina
+		Modifiers[i] = weighted
+		Player.ModAV(derived[i], Modifiers[i])
+		i += 1
+	EndWhile
+	
+EndFunction
+
 ;Function UpdateShoutBonuses()
 ;	Int i = 0
 ;	While i < shout_derived.length

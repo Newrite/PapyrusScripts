@@ -10,6 +10,7 @@
         <Import>.\Resources\SKSE</Import>
         <Import>.\Resources\ORD</Import>
         <Import>.\Resources\My</Import>
+        <Import>.\Resources\requiem</Import>
         <Import>.\Resources\GameSource</Import>
         <Import>.\Resources\GameSource\Dawnguard</Import>
         <Import>.\Resources\GameSource\Hearthfire</Import>

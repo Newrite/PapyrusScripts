@@ -400,7 +400,7 @@ Function RunDragonKillEvent()
                 ;;;;;;;;!!!!
                 DragonToKill.StartDeferredKill()
                 if DragonToKill.isflying()
-                        DragonToKill.damageAV("health", 5000)
+                        DragonToKill.damageAV("health", 25000)
                 endif
         DragonToKillAlias.ForceRefTo(DragonToKill)
         ;Move Miraak to safe room
@@ -484,7 +484,7 @@ Function DragonKillSceneEnded()
 ;         debug.Trace(self + ": Dragon Kill Scene has ended")
         if !DragonToKill.isDead()
                 DragonToKill.EndDeferredKill()
-                DragonToKill.damageAV("health", 10000)
+                DragonToKill.damageAV("health", 20000)
         endif
         self.getActorRef().RemoveSpell(DLC2MiraakFakeShoutSpell)
         ;while !DragonToKill.isDead()

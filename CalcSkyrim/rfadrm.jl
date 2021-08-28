@@ -1,7 +1,7 @@
 GLOBALMULT = 1.0
-GLOBALWEIGHTMULT = 1.5
+GLOBALWEIGHTMULT = 1.25
 POWERMOD = 2.0
-POWERVALUE = 00.0
+POWERVALUE = 0.0
 
 function GetWeightInfluence(Weight)
     return Weight * GLOBALWEIGHTMULT
@@ -17,16 +17,28 @@ function GetPowerAttackMult(PowerAttack)
     return 0.0
 end
 
+function Delta(Weight, Flat)
+    return Flat * (1 - (Weight * 2.0 / 100.0))
+end
+
 function GetDrainValue(Weight, PowerAttackMult, infamy)
-    if infamy > 1.0
-        return ((Weight / 1.5 * infamy) + ((Weight / 1.5 * infamy) * PowerAttackMult)) * GLOBALMULT
+    if PowerAttackMult > 0.0
+        if infamy > 1.0
+            return ((Weight * infamy) + (Weight * infamy * PowerAttackMult) + Delta(Weight, 10.0)) * GLOBALMULT
+        else
+            return (Weight  + (Weight  * PowerAttackMult) + Delta(Weight, 10.0)) * GLOBALMULT
+        end
     else
-        return ((Weight / 1.5)  + ((Weight / 1.5) * PowerAttackMult)) * GLOBALMULT
+        if infamy > 1.0
+            return ((Weight * infamy) + Delta(Weight, 5.0)) * GLOBALMULT
+        else
+            return (Weight + Delta(Weight, 5.0)) * GLOBALMULT
+        end
     end
 end
 
 function CalcResource(Weight, PowerAttack, infamy)
     WeightValue = GetWeightInfluence(Weight)
     PowerAttackInf = GetPowerAttackMult(PowerAttack)
-    return GetDrainValue(WeightValue, PowerAttackInf, infamy)
+    return GetDrainValue(WeightValue / 2.0, PowerAttackInf, infamy)
 end

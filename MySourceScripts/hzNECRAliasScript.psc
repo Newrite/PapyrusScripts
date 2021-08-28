@@ -100,16 +100,16 @@ State Main
 ;					debug.messagebox("shot")
 				elseif asEventName == "reload" || asEventName == "ReloadFast"
 					hzNECRBoltLoaded.SetValueInt(0)
-					if bSKSE
-						CalculateStaminaCost()
-						hzNECRStaminaDrainSpell.SetNthEffectMagnitude(0, fStaminaCost)
-						hzNECRStaminaDrainSpell.SetNthEffectMagnitude(1, fStaminaCost)
-					endif
-					hzNECRStaminaDrainSpell.Cast(PlayerRef, PlayerRef)
+					;if bSKSE
+					;	CalculateStaminaCost()
+					;	hzNECRStaminaDrainSpell.SetNthEffectMagnitude(0, fStaminaCost)
+					;	hzNECRStaminaDrainSpell.SetNthEffectMagnitude(1, fStaminaCost)
+					;endif
+					;hzNECRStaminaDrainSpell.Cast(PlayerRef, PlayerRef)
 ;					debug.messagebox("reload start")
 				elseif asEventName == "reloadStop"
 					hzNECRBoltLoaded.SetValueInt(1)
-					PlayerRef.DispelSpell(hzNECRStaminaDrainSpell)
+					;PlayerRef.DispelSpell(hzNECRStaminaDrainSpell)
 ;					debug.messagebox("reloaded")
 				endif 
 			endif

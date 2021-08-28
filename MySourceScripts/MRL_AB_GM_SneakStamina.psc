@@ -51,7 +51,7 @@ Event OnMenuClose(String Menu)
 
 		float Stamina = Caster.GetBaseActorValue("stamina")
 
-		if Stamina >= 150.0
+		if Stamina >= 140.0
 			SetSneakMod(Stamina)
 		endif
 
