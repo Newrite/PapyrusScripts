@@ -8,7 +8,6 @@ Scriptname MRL_AttackDrainManager extends ActiveMagicEffect
 Keyword Property MagicWeapon Auto ;Кейворд на оружии обозначающий что оно расходует магию
 Keyword Property HealthWeapon Auto ;Кейворд на оружии обозначающий что оно расходует здоровье
 Keyword Property DualWeapon Auto ;Кейворд на оружии обозначает что оно расходует запас сил + что-то еще (на оружии тогда также нужен один из кейвордов выше, иначе будет тратить только запас сил). В этом случае расход делится поровну на обе характеристики
-
 ;Глобальные переменные, выведены в мсм
 GlobalVariable Property GlobalMult Auto ;Мультипликатор для функции GetDrainValue, отвечает за конечный рассчет ресурса
 GlobalVariable Property GlobalWeightMult Auto ;Мультипликатор для функции GetEquippedWeaponWeight, отвечает за конечный рассчет влияния веса

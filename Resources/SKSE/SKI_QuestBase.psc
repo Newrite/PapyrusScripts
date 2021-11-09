@@ -1,21 +1,5 @@
 scriptname SKI_QuestBase extends Quest hidden
 
-;##################################################################################################
-; API Version:		1
-;##################################################################################################
-;
-; Base script for SkyUI quest scripts.
-;
-; This file contains the public interface of SKI_QuestBase so you're able to extend it.
-;
-; DO NOT MODIFY THIS SCRIPT!
-; DO NOT RECOMPILE THIS SCRIPT!
-;
-;##################################################################################################
-
-event OnInit()
-endEvent
-
 ; -------------------------------------------------------------------------------------------------
 ; Version Tracking
 ;
@@ -27,15 +11,22 @@ endEvent
 int property CurrentVersion auto hidden
 
 function CheckVersion()
-	Guard()
+	int version = GetVersion()
+	if (CurrentVersion < version)
+		OnVersionUpdateBase(version)
+		OnVersionUpdate(version)
+		CurrentVersion = version
+	endIf
 endFunction
 
 int function GetVersion()
-	Guard()
+	return 1
 endFunction
 
+event OnVersionUpdateBase(int a_version)
+endEvent
+
 event OnVersionUpdate(int a_version)
-	Guard()
 endEvent
 
 
@@ -49,7 +40,3 @@ endEvent
 
 event OnGameReload()
 endEvent
-
-function Guard()
-	Debug.MessageBox("SKI_QuestBase: Don't recompile this script!")
-endFunction

@@ -13,7 +13,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
     if asEventName == "bashRelease"
         if Target.GetActorValue(ActorValueToDamage) as Float >= DamageAmount
             AbsorbSpell.Cast(Target)
-            Target.ModActorValue(ActorValueToDamage, -DamageAmount)
+            Target.DamageActorValue(ActorValueToDamage, DamageAmount)
         endif
     endif
 EndEvent
@@ -23,7 +23,3 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
     TargetRef = akTarget as ObjectReference
     RegisterForAnimationEvent(TargetRef, "bashRelease")
 endEvent
-
-Event OnEffectFinish(Actor akTarget, Actor akCaster)
-    UnregisterForAnimationEvent(TargetRef, "bashRelease")
-EndEvent

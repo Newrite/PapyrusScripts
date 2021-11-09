@@ -37,9 +37,9 @@ Perk Property HotReloadPerk Auto
 ;ПЕРЕМЕННЫЕ
 ;------
 
-
+;Актор на котором стартует эффект
 Actor Target
-ObjectReference TargetRef
+ObjectReference TargetRef; Референс на актор для регистрации анимаций
 
 ;Переменные для проверки состояния и расхода ресурса лука
 ;Bool IsDrawn = false
@@ -276,8 +276,9 @@ float Function GetPowerAttackMult(bool PowerAttack)
         ;Рассчет мультипликатора на силовую учитывая специальный актор велью который определяет уменьшение или увеличения расхода на силовые
         float PowerValue = Target.GetActorValue(PowerAttackSpend) as float
 
-        if PowerValue > 75.0
-            PowerValue = 75.0
+        ;Кап удешевления силовой
+        if PowerValue > 90.0
+            PowerValue = 90.0
         endif
 
         return PowerMod * (1.0 - ( PowerValue / 100.0 ))
@@ -421,6 +422,7 @@ EndFunction
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
 
+    ;Инициализируем и запоминаем актора на котором все запускается
 	Target = akTarget
 	TargetRef = akTarget as ObjectReference
 
@@ -506,6 +508,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
         endif
 
         ;Небольшая подстраховка, болт выпущен значит дрейна и перезарядки точно нет, также сжираем доп ресурс за болты крови \ магии через каст спела в котором находятся все нужные эффекты (немного разгружаем папирус и расширяем функциональность)
+        ;Дополнительная проверка на стадию не перезарядки для подстраховки, от третьего лица почему-то при перезарядке арбалета запускается анимация arrowRelease и происходит выполнение функции
         if asEventName == "arrowRelease"
 
             if !IsReload
@@ -584,10 +587,30 @@ endState
 ;Стейты на расход разных ресурсов при натяжении лука
 state BowDrawnHealth
 
+    Event OnObjectUnequipped(Form akBaseObject, ObjectReference akReference)
+
+        if akBaseObject as Weapon
+
+            DrawnValue = 0.0
+            GoToState("")
+
+        endif
+
+    endEvent
+
 	function OnUpdate()
 
-        DefaultDrain(HealthValueString, DrawnValue * GlobalUpdateTimeBow.GetValue() as Float)
-        RegisterForSingleUpdate(GlobalUpdateTimeBow.GetValue() as Float)
+        if Target.GetAnimationVariableBool("IsAttacking")
+
+            DefaultDrain(HealthValueString, DrawnValue * GlobalUpdateTimeBow.GetValue() as Float)
+            RegisterForSingleUpdate(GlobalUpdateTimeBow.GetValue() as Float)
+
+        else
+
+            DrawnValue = 0.0
+            GoToState("")
+
+        endif
 
 	endFunction
 
@@ -601,10 +624,30 @@ endState
 
 state BowDrawnStamina
 
+    Event OnObjectUnequipped(Form akBaseObject, ObjectReference akReference)
+
+        if akBaseObject as Weapon
+
+            DrawnValue = 0.0
+            GoToState("")
+
+        endif
+
+    endEvent
+
 	function OnUpdate()
 
-        DefaultDrain(StaminaValueString, DrawnValue * GlobalUpdateTimeBow.GetValue() as Float)
-        RegisterForSingleUpdate(GlobalUpdateTimeBow.GetValue() as Float)
+        if Target.GetAnimationVariableBool("IsAttacking")
+
+            DefaultDrain(StaminaValueString, DrawnValue * GlobalUpdateTimeBow.GetValue() as Float)
+            RegisterForSingleUpdate(GlobalUpdateTimeBow.GetValue() as Float)
+
+        else
+
+            DrawnValue = 0.0
+            GoToState("")
+
+        endif
 
 	endFunction
 
@@ -618,10 +661,30 @@ endState
 
 state BowDrawnMagicka
 
+    Event OnObjectUnequipped(Form akBaseObject, ObjectReference akReference)
+
+        if akBaseObject as Weapon
+
+            DrawnValue = 0.0
+            GoToState("")
+
+        endif
+
+    endEvent
+
 	function OnUpdate()
 
-        DefaultDrain(MagickaValueString, DrawnValue * GlobalUpdateTimeBow.GetValue() as Float)
-        RegisterForSingleUpdate(GlobalUpdateTimeBow.GetValue() as Float)
+        if Target.GetAnimationVariableBool("IsAttacking")
+
+            DefaultDrain(MagickaValueString, DrawnValue * GlobalUpdateTimeBow.GetValue() as Float)
+            RegisterForSingleUpdate(GlobalUpdateTimeBow.GetValue() as Float)
+
+        else
+
+            DrawnValue = 0.0
+            GoToState("")
+
+        endif
 
 	endFunction
 
@@ -635,10 +698,30 @@ endState
 
 state BowDrawnMagickaStamina
 
+    Event OnObjectUnequipped(Form akBaseObject, ObjectReference akReference)
+
+        if akBaseObject as Weapon
+
+            DrawnValue = 0.0
+            GoToState("")
+
+        endif
+
+    endEvent
+
 	function OnUpdate()
 
-        DefaultDualDrain(MagickaValueString, (DrawnValue * GlobalUpdateTimeBow.GetValue() as Float) / 2.0)
-        RegisterForSingleUpdate(GlobalUpdateTimeBow.GetValue() as Float)
+        if Target.GetAnimationVariableBool("IsAttacking")
+
+            DefaultDualDrain(MagickaValueString, (DrawnValue * GlobalUpdateTimeBow.GetValue() as Float) / 2.0)
+            RegisterForSingleUpdate(GlobalUpdateTimeBow.GetValue() as Float)
+
+        else
+
+            DrawnValue = 0.0
+            GoToState("")
+
+        endif
 
 	endFunction
 
@@ -652,10 +735,30 @@ endState
 
 state BowDrawnHealthStamina
 
+    Event OnObjectUnequipped(Form akBaseObject, ObjectReference akReference)
+
+        if akBaseObject as Weapon
+
+            DrawnValue = 0.0
+            GoToState("")
+
+        endif
+
+    endEvent
+
 	function OnUpdate()
 
-        DefaultDualDrain(HealthValueString, (DrawnValue * GlobalUpdateTimeBow.GetValue() as Float) / 2.0)
-        RegisterForSingleUpdate(GlobalUpdateTimeBow.GetValue() as Float)
+        if Target.GetAnimationVariableBool("IsAttacking")
+
+            DefaultDualDrain(HealthValueString, (DrawnValue * GlobalUpdateTimeBow.GetValue() as Float) / 2.0)
+            RegisterForSingleUpdate(GlobalUpdateTimeBow.GetValue() as Float)
+
+        else
+
+            DrawnValue = 0.0
+            GoToState("")
+
+        endif
 
 	endFunction
 
@@ -666,7 +769,6 @@ state BowDrawnHealthStamina
 	endFunction
 
 endState
-
 
 ;Стейты на расход разных ресурсов при перезарядке арбалета
 state CrossBowReloadHealth

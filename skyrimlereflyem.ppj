@@ -17,6 +17,6 @@
         <Import>.\Resources\GameSource\Dragonborn</Import>
     </Imports>
     <Folders>
-        <Folder>.\MySourceScripts</Folder>
+        <Folder>.\MySourceScripts\Reflyem</Folder>
     </Folders>
 </PapyrusProject>

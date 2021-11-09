@@ -4,7 +4,6 @@ Scriptname MRL_NPCBlockChange extends ActiveMagicEffect
 Spell Property SpellBlockBashAndBlock Auto
 Float Property UpdateTime Auto
 Int Property MaxTimeInBlock Auto
-Idle Property StopBlocking Auto
 
 actor Blocker
 
@@ -36,7 +35,7 @@ Event OnUpdate()
             SpellBlockBashAndBlock.Cast(Blocker, Blocker)
 
             while Blocker.GetAnimationVariableBool("IsBlocking")
-                Blocker.PlayIdle(StopBlocking)
+                Debug.SendAnimationEvent(Blocker, "blockStop")
             endWhile
 
             UnregisterForUpdate()
