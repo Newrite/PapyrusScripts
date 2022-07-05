@@ -20,7 +20,6 @@ sound property TVR_Violence_Descriptor_Chained auto
 function OnEffectFinish(Actor akTarget, Actor akCaster)
 
 	if !akTarget.HasEffectKeyword(BookShelfBook07)
-		akTarget.ClearKeepOffsetFromActor()
 		akTarget.SetDontMove(false)
 	endIf
 endFunction
@@ -29,7 +28,6 @@ endFunction
 
 function OnEffectStart(Actor akTarget, Actor akCaster)
 
-	akTarget.KeepOffsetFromActor(akTarget, 0 as Float, 0 as Float, 0 as Float, 0 as Float, 0 as Float, 0 as Float, 50 as Float, 100 as Float)
 	akTarget.SetDontMove(true)
 	if TVR_Violence_Descriptor_Chained
 		TVR_Violence_Descriptor_Chained.Play(akTarget as objectreference)

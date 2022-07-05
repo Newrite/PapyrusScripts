@@ -101,40 +101,43 @@ Function Reset_Buffs()
 	;EndWhile
 EndFunction
 
-Function UpdateAttributeBonuses()
-	Int i = 0
-	Float magicka = Player.GetBaseAV("Magicka")
-	Float stamina = Player.GetBaseAV("Stamina")
-	Float health = Player.GetBaseAV("Health")
-	Float weighted = 0.0
-	While i < derived.length
-		Player.ModAV(derived[i], -Modifiers[i])
-		weighted = weight_health[i] * health + weight_magicka[i] * magicka + weight_stamina[i] * stamina
-		If weighted > threshold[i]
-			Modifiers[i] = prefactor[i] * Math.Pow(weighted - threshold[i], 0.5)
-		Else
-			Modifiers[i] = 0.0
-		EndIf
-		Player.ModAV(derived[i], Modifiers[i])
-		i += 1
-	EndWhile
-EndFunction
+;Function UpdateAttributeBonuses()
+;	Int i = 0
+;	Float magicka = Player.GetBaseAV("Magicka")
+;	Float stamina = Player.GetBaseAV("Stamina")
+;	Float health = Player.GetBaseAV("Health")
+;	Float weighted = 0.0
+;	While i < derived.length
+;		Player.ModAV(derived[i], -Modifiers[i])
+;		weighted = weight_health[i] * health + weight_magicka[i] * magicka + weight_stamina[i] * stamina
+;		If weighted > threshold[i]
+;			Modifiers[i] = prefactor[i] * Math.Pow(weighted - threshold[i], 0.5)
+;		Else
+;			Modifiers[i] = 0.0
+;		EndIf
+;		Player.ModAV(derived[i], Modifiers[i])
+;		i += 1
+;	EndWhile
+;EndFunction
 
 float Function CalcStat(float StatValue)
 
 	if StatValue < 0.0
 		return 0.0 
 	endif
+	if StatValue >= 150.0
+		return 125.0
+	endIf
 	if StatValue > 100.0 
 		return 100.0 + ((StatValue - 100.0) / 2.0)
 	endIf
-	if StatValue > 150.0
-		return 125.0
-	endIf
+
+	return StatValue
 
 EndFunction
 
-Function UpdateAttributeBonuses2()
+Function UpdateAttributeBonuses()
+
 	Int i = 0
 	Float magicka = CalcStat(Player.GetBaseAV("Magicka") - 100.0)
 	Float stamina = CalcStat(Player.GetBaseAV("Stamina") - 100.0)

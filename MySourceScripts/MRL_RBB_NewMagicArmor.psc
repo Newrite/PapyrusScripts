@@ -98,6 +98,7 @@ Function changeDamageResist()
 
     damageResistBust = effectTarget.GetBaseAV("Magicka") * BaseManaScale
     MagicArmorSpell.SetNthEffectMagnitude(0, damageResistBust)
+    MagicArmorSpell.SetNthEffectMagnitude(1, damageResistBust)
     effectTarget.AddSpell(MagicArmorSpell, false)
     
 

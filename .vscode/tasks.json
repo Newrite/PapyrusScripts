@@ -9,7 +9,7 @@
             "options": {},
             "args": [
                 {
-                    "value": ".\\${file}",
+                    "value": "${file}",
                     "quoting": "strong"
                 },
                 {
@@ -30,6 +30,26 @@
             ],
         },
         {
+            "label": "Papyrus Compile File with copy to Source (Skyrim)",
+            "group": "build",
+            "type": "shell",
+            "command": "cp",
+            "options": {},
+            "args": [
+                {
+                    "value": "${file}",
+                    "quoting": "strong"
+                },
+                {
+                    "value": "..\\scripts\\Source\\${fileBasename}",
+                    "quoting": "strong"
+                }
+            ],
+            "dependsOn": [
+                "Papyrus Compile File (Skyrim)"
+            ],
+        },
+        {
             "label": "Papyrus Decompile File (Skyrim)",
             "group": "build",
             "type": "process",
@@ -37,7 +57,7 @@
             "options": {},
             "args": [
                 {
-                    "value": ".\\Champollion\\ToDecompile\\TIF__00060679.pex",
+                    "value": ".\\Champollion\\ToDecompile\\${fileBasename}",
                     "quoting": "strong"
                 },
                 {

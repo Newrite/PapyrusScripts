@@ -32,6 +32,10 @@ Spell Property SpellForArrowCost Auto
 ;Перк на ловкую перезарядку, уменьшает расход ресурса арбалета
 Perk Property HotReloadPerk Auto
 
+Keyword Property AmmoLight Auto
+Keyword Property AmmoMedium Auto
+Keyword Property AmmoHeavy Auto
+Keyword Property AmmoMassive Auto
 
 ;------
 ;ПЕРЕМЕННЫЕ
@@ -46,11 +50,12 @@ ObjectReference TargetRef; Референс на актор для регист�
 Float DrawnValue = 0.0
 
 ;Переменные для проверки состояния и расхода ресурса арбалета
-Bool IsReload = false
+Bool IsReload     = false
 Float ReloadValue = 0.0
 
 ;Актор велью для модификатором удешевления силовых атак
-String PowerAttackSpend = "marksmanskilladvance"
+String PowerAttackSpend  = "marksmanskilladvance"
+String NormalAttackSpend = "alchemyskilladvance"
 
 ;Souls Var, расход запаса сил к след удару и общее количество потраченного запаса сил
 float SwingDrainST = 0.0
@@ -64,7 +69,7 @@ float TotalDrainST = 0.0
 Function MeleeWeaponCalc(Weapon Weap, bool PowerAttack)
 
     ;Рассчет значения расхода ресурса
-    float DrainValue = GetDrainValue(GetEquippedWeaponWeight(Weap) * 0.5, GetPowerAttackMult(PowerAttack))
+    float DrainValue = GetDrainValue(GetEquippedWeaponWeight(Weap) * GetNormalAttackMult(), GetPowerAttackMult(PowerAttack))
 
     ;Проверка расходует ли оружие два стата сразу (стамина + доп стат или только один из)
     if Weap.HasKeyword(DualWeapon)
@@ -111,7 +116,7 @@ EndFunction
 Function BowWeaponCalc(Weapon Weap)
 
     ;Рассчет значения расхода ресурса
-    DrawnValue = GetDrainValueRanger(GetEquippedWeaponWeight(Weap)) / 1.5
+    DrawnValue = GetAmmowWeightValue() + GetDrainValueRanger(GetEquippedWeaponWeight(Weap) * GetNormalAttackMult())
 
     ;Проверка расходует ли оружие два стата сразу (стамина + доп стат или только один из)
     if Weap.HasKeyword(DualWeapon)
@@ -159,9 +164,9 @@ Function CrossBowWeaponCalc(Weapon Weap)
 
     ;Рассчет значения расхода ресурса с учетом перка
     if Target.HasPerk(HotReloadPerk)
-        ReloadValue = (GetDrainValueRanger(GetEquippedWeaponWeight(Weap)) * 0.7) / 1.5
+        ReloadValue = GetAmmowWeightValue() + GetDrainValueRanger(GetEquippedWeaponWeight(Weap) * GetNormalAttackMult()) * 0.7
     else
-        ReloadValue = GetDrainValueRanger(GetEquippedWeaponWeight(Weap)) / 1.5
+        ReloadValue = GetAmmowWeightValue() + GetDrainValueRanger(GetEquippedWeaponWeight(Weap)* GetNormalAttackMult())
     endif
 
     ;Проверка расходует ли оружие два стата сразу (стамина + доп стат или только один из)
@@ -216,17 +221,17 @@ float Function GetDrainValue(float Weight, float PowerAttackMult)
 
         ;Бонус расхода от силовой рассчитывается отдельно
         if infamy > 1.0
-            return ((Weight * infamy) + (Weight * infamy * PowerAttackMult ) + (10.0 + (1.0 - (Weight * 2.0 / 100.0)))) *  GlobalMult.GetValue() as Float
+            return ((Weight * infamy) + (Weight * infamy * PowerAttackMult ) + (5.0 + (1.0 - (Weight * 3.0 / 100.0)))) *  GlobalMult.GetValue() as Float
         else
-            return (Weight + (Weight * PowerAttackMult ) + (10.0 + (1.0 - (Weight * 2.0 / 100.0)))) * GlobalMult.GetValue() as Float
+            return (Weight + (Weight * PowerAttackMult ) + (5.0 + (1.0 - (Weight * 3.0 / 100.0)))) * GlobalMult.GetValue() as Float
         endif
 
     else
 
         if infamy > 1.0
-            return ((Weight * infamy) + (5.0 + (1.0 - (Weight * 2.0 / 100.0)))) *  GlobalMult.GetValue() as Float
+            return ((Weight * infamy) + (5.0 + (1.0 - (Weight * 3.0 / 100.0)))) *  GlobalMult.GetValue() as Float
         else
-            return (Weight + (5.0 + (1.0 - (Weight * 2.0 / 100.0)))) * GlobalMult.GetValue() as Float
+            return (Weight + (5.0 + (1.0 - (Weight * 3.0 / 100.0)))) * GlobalMult.GetValue() as Float
         endif
 
     endif
@@ -244,6 +249,29 @@ float Function GetDrainValueRanger(float Weight)
     else
         return Weight * GlobalMult.GetValue() as Float
     endif
+
+EndFunction
+
+;Функция доп расхода на затраты перезарядки или натягивания в зависимости от веса снаряда
+float Function GetAmmowWeightValue()
+
+    if Target.WornHasKeyword(AmmoLight)
+        return 1.5
+    endif
+
+    if Target.WornHasKeyword(AmmoMedium)
+        return 3.0
+    endif
+
+    if Target.WornHasKeyword(AmmoHeavy)
+        return 4.5
+    endif
+
+    if Target.WornHasKeyword(AmmoMassive)
+        return 6.0
+    endif
+
+    return 0.0
 
 EndFunction
 
@@ -287,6 +315,27 @@ float Function GetPowerAttackMult(bool PowerAttack)
 
     ;Возвращая ноль мы не прибавляем бонусного расхода на атаки, возращается если не силовая атака
     return 0.0
+
+EndFunction
+
+;Функция рассчета мультипликатора нормальной атаки (и ренж и мили)
+float Function GetNormalAttackMult()
+
+    ;Рассчет мультипликатора на обычную атаку или выстрел
+    float AttackValue = Target.GetActorValue(NormalAttackSpend) as float
+
+    if AttackValue > 0.0
+        ;Кап кап удешевления
+        if AttackValue > 90.0
+            AttackValue = 90.0
+        endif
+
+        return 1.0 - ( AttackValue / 100.0 )
+
+    endif
+
+    ;Возвращаяем ноль если нет никакого удешевления
+    return 1.0
 
 EndFunction
 

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>FunctionalMutagen</name></assembly>
+<members>
+<member name="M:Mutagen.Func.Mods.createOblivionMod(System.String)">
+<summary>
+Function for create a new Oblivion mod, fields only mod name
+</summary>
+</member>
+<member name="M:Mutagen.Func.Mods.createFalloutMod(System.String)">
+<summary>
+Function for create a new Fallout4 mod, fields only mod name
+</summary>
+</member>
+<member name="M:Mutagen.Func.Mods.createSkyrimMod(System.String,Mutagen.Bethesda.Skyrim.SkyrimRelease)">
+<summary>
+Function for create a new skyrim mod, fields mod name, name must include file extension, 
+and SkyrimRelease Enum from Mutagen.Bethesda.Skyrim namespace
+</summary>
+</member>
+<member name="T:Mutagen.Func.Mods">
+<summary>
+Module contain some wrappers for create bethesda mods
+</summary>
+</member>
+<member name="M:Mutagen.Func.LoadOrder.skyrimPriorityOrderFromEnvRevers(Mutagen.Bethesda.Skyrim.SkyrimRelease)">
+<summary> 
+Get Skyrim Priority Order from system enviroment, return reverse order, need skyrim release, Enum Mutagen.Bethesda.Skyrim namespace
+</summary>
+</member>
+<member name="M:Mutagen.Func.LoadOrder.skyrimListedOrderFromEnvRevers(Mutagen.Bethesda.Skyrim.SkyrimRelease)">
+<summary> 
+Get Skyrim Listed Order from system enviroment, return reverse order, need skyrim release, Enum Mutagen.Bethesda.Skyrim namespace
+</summary>
+</member>
+<member name="M:Mutagen.Func.LoadOrder.skyrimPriorityOrderFromEnv(Mutagen.Bethesda.Skyrim.SkyrimRelease)">
+<summary> 
+Get Skyrim Priority Order from system enviroment, need skyrim release, Enum Mutagen.Bethesda.Skyrim namespace
+</summary>
+</member>
+<member name="M:Mutagen.Func.LoadOrder.skyrimListedOrderFromEnv(Mutagen.Bethesda.Skyrim.SkyrimRelease)">
+<summary> 
+Get Skyrim Listed Order from system enviroment, need skyrim release, Enum Mutagen.Bethesda.Skyrim namespace
+</summary>
+</member>
+<member name="T:Mutagen.Func.LoadOrder">
+<summary>
+Module contain functions for get a some loaded orders
+</summary>
+</member>
+<member name="M:Mutagen.Func.Records.Skyrim.MagicEffect.winningOverrides(System.Boolean,System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Get MagicEffect records with last overrides in given load order, load order can get from Mutagen.Func.LoadOrder
+</summary>
+</member>
+<member name="M:Mutagen.Func.Records.Skyrim.MagicEffect.winningContextOverrides(System.Boolean,System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Get context MagicEffect records with last overrides in given load order, load order can get from Mutagen.Func.LoadOrder
+
+Original description of method:
+Will find and return the most overridden version of each record in the list of mods of the given type. <br /><br />
+            Additionally, it will come wrapped in a context object that has knowledge of where each record came from. <br />
+            This context helps when trying to override deep records such as Cells/PlacedObjects/etc, as the context is able to navigate
+            and insert the record into the proper location for you.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Records.Skyrim.LeveledNpc.winningOverrides(System.Boolean,System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Get LeveledNpc records with last overrides in given load order, load order can get from Mutagen.Func.LoadOrder
+</summary>
+</member>
+<member name="M:Mutagen.Func.Records.Skyrim.LeveledNpc.winningContextOverrides(System.Boolean,System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Get context LeveledNpc records with last overrides in given load order, load order can get from Mutagen.Func.LoadOrder
+
+Original description of method:
+Will find and return the most overridden version of each record in the list of mods of the given type. <br /><br />
+            Additionally, it will come wrapped in a context object that has knowledge of where each record came from. <br />
+            This context helps when trying to override deep records such as Cells/PlacedObjects/etc, as the context is able to navigate
+            and insert the record into the proper location for you.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Records.Skyrim.Npc.winningOverrides(System.Boolean,System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Get Npc records with last overrides in given load order, load order can get from Mutagen.Func.LoadOrder
+</summary>
+</member>
+<member name="M:Mutagen.Func.Records.Skyrim.Npc.winningContextOverrides(System.Boolean,System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Get context Npc records with last overrides in given load order, load order can get from Mutagen.Func.LoadOrder
+
+Original description of method:
+Will find and return the most overridden version of each record in the list of mods of the given type. <br /><br />
+            Additionally, it will come wrapped in a context object that has knowledge of where each record came from. <br />
+            This context helps when trying to override deep records such as Cells/PlacedObjects/etc, as the context is able to navigate
+            and insert the record into the proper location for you.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Records.Skyrim.Armor.winningOverrides(System.Boolean,System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Get Armor records with last overrides in given load order, load order can get from Mutagen.Func.LoadOrder
+</summary>
+</member>
+<member name="M:Mutagen.Func.Records.Skyrim.Armor.winningContextOverrides(System.Boolean,System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Get context Armor records with last overrides in given load order, load order can get from Mutagen.Func.LoadOrder
+
+Original description of method:
+Will find and return the most overridden version of each record in the list of mods of the given type. <br /><br />
+            Additionally, it will come wrapped in a context object that has knowledge of where each record came from. <br />
+            This context helps when trying to override deep records such as Cells/PlacedObjects/etc, as the context is able to navigate
+            and insert the record into the proper location for you.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Records.Skyrim.Weapon.winningOverrides(System.Boolean,System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Get Weapon records with last overrides in given load order, load order can get from Mutagen.Func.LoadOrder
+</summary>
+</member>
+<member name="M:Mutagen.Func.Records.Skyrim.Weapon.winningContextOverrides(System.Boolean,System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Get context Weapon records with last overrides in given load order, load order can get from Mutagen.Func.LoadOrder
+
+Original description of method:
+Will find and return the most overridden version of each record in the list of mods of the given type. <br /><br />
+            Additionally, it will come wrapped in a context object that has knowledge of where each record came from. <br />
+            This context helps when trying to override deep records such as Cells/PlacedObjects/etc, as the context is able to navigate
+            and insert the record into the proper location for you.
+</summary>
+</member>
+<member name="T:Mutagen.Func.Records">
+<summary>
+Module contain functions get and manipulate records
+</summary>
+</member>
+<member name="M:Mutagen.Func.Cache.toUntypedImmutableLinkCache(System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Origianl description:
+Create a new linking package relative a load order. Will resolve links to the highest overriding mod containing 
+the record being sought. Modification of target LoadOrder, or Mods on the LoadOrder is not safe. 
+Internal caches become incorrect in modifications occur on content already cached.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Cache.toImmutableLinkCache(System.Collections.Generic.IEnumerable{Mutagen.Bethesda.Plugins.Order.IModListingGetter{Mutagen.Bethesda.Skyrim.ISkyrimModGetter}})">
+<summary>
+Origianl description:
+Create a new linking package relative a load order. Will resolve links to the highest overriding mod containing 
+the record being sought. Modification of target LoadOrder, or Mods on the LoadOrder is not safe. 
+Internal caches become incorrect in modifications occur on content already cached.
+</summary>
+</member>
+<member name="T:Mutagen.Func.Cache">
+<summary>
+Module contain functions get and manipulate form link cache
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.VirtualMachineAdapter.create(Microsoft.FSharp.Collections.FSharpList{Mutagen.Bethesda.Skyrim.ScriptEntry})">
+<summary>
+Create new VirtualMachineAdapter, can fill ScriptEntry list with Scripts.ScriptEntry.New.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptProperty.objectList(Microsoft.FSharp.Collections.FSharpList{Mutagen.Bethesda.Skyrim.ScriptObjectProperty})">
+<summary>
+Create new ScriptObjectListProperty, field Bethesda objects, 
+for create list of objects use Scripts.ScriptProperty.Object.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptProperty.integerList(System.String,Microsoft.FSharp.Collections.FSharpList{System.Int32})">
+<summary>
+Create new ScriptIntListProperty, field name and int list value.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptProperty.stringList(System.String,Microsoft.FSharp.Collections.FSharpList{System.String})">
+<summary>
+Create new ScriptStringListProperty, field name and string list value.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptProperty.boolList(System.String,Microsoft.FSharp.Collections.FSharpList{System.Boolean})">
+<summary>
+Create new ScriptBoolListProperty, field name and bool list value.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptProperty.floatList(System.String,Microsoft.FSharp.Collections.FSharpList{System.Single})">
+<summary>
+Create new ScriptFloatListProperty, field name and float32 list value.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptProperty.object``1(System.String,Mutagen.Bethesda.Plugins.FormLink{``0})">
+<summary>
+Create new ScriptObjectProperty, field name and Bethesda object, 
+need link object so you can use FormKeys from Mutagen.Bethesda.FormKeys lib 
+lib link: https://github.com/Mutagen-Modding/Mutagen.Bethesda.FormKeys.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptProperty.integer(System.String,System.Int32)">
+<summary>
+Create new ScriptIntProperty, field name and int value.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptProperty.string(System.String,System.String)">
+<summary>
+Create new ScriptStringProperty, field name and string value.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptProperty.bool(System.String,System.Boolean)">
+<summary>
+Create new ScriptBoolProperty, field name and bool value.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptProperty.float(System.String,System.Single)">
+<summary>
+Create new ScriptFloatProperty, field name and float32 value.
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptProperty.buildExtendList``1(Microsoft.FSharp.Collections.FSharpList{``0})">
+<summary>
+Internal function, build ExtendedList from F# list, need for PropertyList functions
+</summary>
+</member>
+<member name="M:Mutagen.Func.Scripts.ScriptEntry.create(System.String,Microsoft.FSharp.Collections.FSharpList{Mutagen.Bethesda.Skyrim.ScriptProperty})">
+<summary>
+Create new ScriptEntry with ScriptName and list of ScriptProperty, can fill with Scripts.ScriptProperty module.
+</summary>
+</member>
+<member name="T:Mutagen.Func.Scripts">
+<summary>
+Module contains a small DSL for create scripts.
+Script entry in Scripts.ScriptEntry
+Script propertyes in Scripts.ScriptProperty
+VirtualMachineAdapter module for build new VirtualMachineAdapter if needed
+</summary>
+</member>
+</members>
+</doc>

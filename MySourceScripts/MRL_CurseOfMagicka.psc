@@ -9,7 +9,6 @@ FormList Property listOfExpertPerks auto
 FormList Property listOfMasterPerks auto
 
 Spell Property CursedRegenSpell auto
-Spell Property CursedExplosion auto
 
 GlobalVariable Property gCurseDamage Auto
 GlobalVariable Property gCurseCost Auto
@@ -65,34 +64,20 @@ EndFunction
 bool Function WaitCondition(int index)
 
 	if index == iLeftCastIndex
-		return CursedActor.GetAnimationVariableBool("IsCastingLeft") && !(CursedActor.GetAnimationVariableBool("IsCastingRight") && IsConcentratedSpell(SpellRight))
+		return CursedActor.GetAnimationVariableBool("IsCastingLeft") && IsConcentratedSpell(SpellLeft)
 	endif
 
 	if index == iRightCastIndex
-		return !(CursedActor.GetAnimationVariableBool("IsCastingLeft") && IsConcentratedSpell(SpellLeft)) && CursedActor.GetAnimationVariableBool("IsCastingRight")
+		return IsConcentratedSpell(SpellRight) && CursedActor.GetAnimationVariableBool("IsCastingRight")
 	endif
 
 	if index == iDualCastIndex
-		return CursedActor.GetAnimationVariableBool("IsCastingLeft") && CursedActor.GetAnimationVariableBool("IsCastingRight") || CursedActor.GetAnimationVariableBool("IsCastingDual")
+		return (IsConcentratedSpell(SpellRight) && IsConcentratedSpell(SpellLeft)) && CursedActor.GetAnimationVariableBool("IsCastingDual")
 	endif
 
-	return 0
+	return false
 
 endFunction
-
-Function OverExplosion()
-
-	float ExplosionValue = CursedActor.GetActorValue("Health") as Float / CursedActor.GetActorValuePercentage("Health") as Float * 0.5
-
-	float fDiffMultHPToPCL = Game.GetGameSettingfloat("fDiffMultHPToPCL")
-
-	CursedExplosion.SetNthEffectMagnitude(0, (fConstDamageExplosion + ExplosionValue) / fDiffMultHPToPCL)
-	CursedExplosion.SetNthEffectMagnitude(1, (fConstDamageExplosion + ExplosionValue) / fDiffMultHPToPCL)
-
-	CursedExplosion.Cast(CursedActor, CursedActor)
-	CursedActor.ModActorValue(sCrusedValue, -100.0)
-
-EndFunction
 
 Function ApplyConcCursed(float Cost, int WaitIndex)
 
@@ -101,10 +86,6 @@ Function ApplyConcCursed(float Cost, int WaitIndex)
 		if CursedActor.GetActorValue(sCrusedValue) as Float < 100.0
 			CursedActor.ModActorValue(sCrusedValue, Cost)
 			CursedActor.DamageActorValue("Stamina", Cost)
-		endif
-
-		if CursedActor.GetActorValue(sCrusedValue) as Float >= 100.0
-			OverExplosion()
 		endif
 
 		Utility.Wait(1.0)
@@ -181,7 +162,7 @@ Function SpellCurse(Form akSpell, float CurseValue)
 
 		bool bDual = CursedActor.GetAnimationVariableBool("IsCastingDual")
 
-		if bDual && IsConcentratedSpell(SpellRight)
+		if bDual
 			ApplyConcCursed(CurseValue / 2.0, iDualCastIndex)
 		endif
 
@@ -201,10 +182,6 @@ Function SpellCurse(Form akSpell, float CurseValue)
 		CursedActor.DamageActorValue("Stamina", CurseValue as Float)
 		CursedRegenSpell.SetNthEffectMagnitude(0, CurseValue * 3.0)
 		CursedRegenSpell.Cast(CursedActor, CursedActor)
-		
-		if CursedActor.GetActorValue(sCrusedValue) as Float >= 100.0
-			OverExplosion()
-		endif
 
 	endif
 

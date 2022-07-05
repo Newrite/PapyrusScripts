@@ -20,8 +20,6 @@ Ammo LastAmmo
 
 Bool bSKSE
 
-Float fStaminaCost
-
 ;--INIT STATE--
 
 Event OnInit()
@@ -100,16 +98,14 @@ State Main
 ;					debug.messagebox("shot")
 				elseif asEventName == "reload" || asEventName == "ReloadFast"
 					hzNECRBoltLoaded.SetValueInt(0)
-					;if bSKSE
-					;	CalculateStaminaCost()
-					;	hzNECRStaminaDrainSpell.SetNthEffectMagnitude(0, fStaminaCost)
-					;	hzNECRStaminaDrainSpell.SetNthEffectMagnitude(1, fStaminaCost)
-					;endif
-					;hzNECRStaminaDrainSpell.Cast(PlayerRef, PlayerRef)
+					if bSKSE
+						hzNECRStaminaDrainSpell.SetNthEffectMagnitude(0, StaminaCost())
+					endif
+					hzNECRStaminaDrainSpell.Cast(PlayerRef, PlayerRef)
 ;					debug.messagebox("reload start")
 				elseif asEventName == "reloadStop"
 					hzNECRBoltLoaded.SetValueInt(1)
-					;PlayerRef.DispelSpell(hzNECRStaminaDrainSpell)
+					PlayerRef.DispelSpell(hzNECRStaminaDrainSpell)
 ;					debug.messagebox("reloaded")
 				endif 
 			endif
@@ -152,13 +148,19 @@ Function AutoReload()
 	endif
 EndFunction
 
-Function CalculateStaminaCost()
-	fStaminaCost = PlayerRef.GetEquippedWeapon().GetWeight()
+float Function StaminaCost()
+	Float fStaminaCost = PlayerRef.GetEquippedWeapon().GetWeight()
 	if PlayerRef.HasMagicEffect(hzNECRStaminaPerkME)
 		fStaminaCost = fStaminaCost*0.7
 	endif
-	fStaminaCost = (fStaminaCost - ((fStaminaCost/200)*PlayerRef.GetAv("Marksman")))*hzNECRStaminaMult.GetValue()
-	;debug.notification("Stamina cost is "+ fStaminaCost +"")
+
+	Int iSkill = PlayerRef.GetAv("Marksman") as Int
+	if iSkill > 100
+		iSkill = 100
+	endif
+	fStaminaCost = (fStaminaCost - ((fStaminaCost/200)*iSkill))*hzNECRStaminaMult.GetValue()
+;	debug.notification("Stamina cost is "+ fStaminaCost +"")
+	return fStaminaCost
 EndFunction
 
 bool Function ReloadCondition()
