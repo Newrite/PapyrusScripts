@@ -13,7 +13,7 @@
                     "quoting": "strong"
                 },
                 {
-                    "value": "-import=.\\MySourceScripts;.\\MySourceScripts\\Reflyem;.\\Resources\\requiem;.\\Resources\\SKSE;.\\Resources\\GameSource;.\\Resources\\GameSource\\Dawnguard;.\\Resources\\GameSource\\Hearthfire;.\\Resources\\GameSource\\Dragonborn",
+                    "value": "-import=.\\MySourceScripts\\All;.\\MySourceScripts\\Reflyem;.\\MySourceScripts\\magick;.\\Resources\\requiem;.\\Resources\\SKSE;.\\Resources\\GameSource;.\\Resources\\GameSource\\Dawnguard;.\\Resources\\GameSource\\Hearthfire;.\\Resources\\GameSource\\Dragonborn",
                     "quoting": "strong"
                 },
                 {

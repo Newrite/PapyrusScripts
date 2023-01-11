@@ -55,6 +55,18 @@ int[] WIndex
 int[] MIndex
 int[] TIndex
 
+int[] Function WarriorIndexes()
+  return WIndex
+EndFunction
+
+int[] Function MageIndexes()
+  return MIndex
+EndFunction
+
+int[] Function ThiefIndexes()
+  return TIndex
+EndFunction
+
 Function InitWarriorsIndex()
   WIndex = new int[6]
   WIndex[0] = 0
@@ -233,7 +245,6 @@ Function SkillAdvance(int statId, int nextSkillLevel)
 	while PlayerRef.GetBaseActorValue(Stats[statId]) as Int < nextSkillLevel
 		Game.IncrementSkill(Stats[statId])
 	endwhile
-
 	actorValue.SetSkillExperience(0.0)
 
 EndFunction

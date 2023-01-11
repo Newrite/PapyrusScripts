@@ -17,6 +17,6 @@
         <Import>.\Resources\GameSource\Dragonborn</Import>
     </Imports>
     <Folders>
-        <Folder>.\MySourceScripts\All</Folder>
+        <Folder>.\MySourceScripts\magick</Folder>
     </Folders>
 </PapyrusProject>
